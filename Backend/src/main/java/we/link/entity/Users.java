@@ -1,5 +1,6 @@
 package we.link.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -9,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,26 +32,20 @@ public class Users {
 	@Column(name = "first_name", nullable = false, length = 15)
 	private String firstName;
 	
-	@Column(name = "middle_name", nullable = true, length = 10)
-	private String middleName;
-	
 	@Column(name = "last_name", nullable = false, length = 15)
 	private String lastName;
+	
+	@Column(nullable = false)
+	private LocalDate dob;
+	
+	@Column(nullable = false)
+	private String gender;
 
     @Column(nullable = false, unique = true)
 	private String email;
 	
     @Column(nullable = false)
 	private String password;
-	
-    @Column(length = 150)
-	private String bio;
-	
-	@Column(name = "profile_image")
-	private String profileImage;
-	
-	@Column(name = "cover_image")
-	private String coverImage;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -58,7 +54,9 @@ public class Users {
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 	
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updatedAt;
+	@PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
 }

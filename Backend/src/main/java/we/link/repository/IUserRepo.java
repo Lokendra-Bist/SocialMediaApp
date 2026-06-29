@@ -10,5 +10,7 @@ import we.link.entity.Users;
 public interface IUserRepo extends JpaRepository<Users, Long> {
 	
 	Optional<Users> findByEmail(String email);
+	
+	boolean existsByEmail(String email);
 
 }

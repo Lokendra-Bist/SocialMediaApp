@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: Backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/WeLink
+    username: postgres
+    password: password
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lokenbista01@gmail.com
+    password: ogci cjrd ogpn zmmu
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 2058
+  servlet:
+    context-path: /WeLink
+
+jwt:
+  secret: af8ce346f03bef4c0484722051d22b411940e5e9b587645889aad7c12408af0a
