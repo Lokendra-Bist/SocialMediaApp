@@ -34,3 +34,8 @@ server:
 
 jwt:
   secret: af8ce346f03bef4c0484722051d22b411940e5e9b587645889aad7c12408af0a
+
+cloudinary:
+  cloud-name: du1xhf4v0
+  api-key: 871663311353698
+  api-secret: IHXzLl4iT052xOdJ9iB2pC49hiY

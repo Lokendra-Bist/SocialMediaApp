@@ -1,12 +1,12 @@
 package we.link.security;
 
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import we.link.entity.CustomUserDetails;
 import we.link.entity.Users;
 import we.link.exception.ResourceNotFoundException;
 import we.link.repository.IUserRepo;
@@ -22,11 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		Users user = userRepo.findByEmail(email)
 						.orElseThrow(() -> new ResourceNotFoundException("User Not FOund!"));
 		
-		return User.builder()
-				.username(user.getEmail())
-				.password(user.getPassword())
-				.roles(user.getRole().name().replace("ROLE_", ""))
-				.build();
+		return new CustomUserDetails(user);
 				
 	}
 
