@@ -1,6 +1,7 @@
 package we.link.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import we.link.request.LoginRequest;
 import we.link.request.OtpSendRequest;
+import we.link.request.ResetPasswordRequest;
 import we.link.request.VerifyOtpRequest;
+import we.link.request.VerifyOtpResetPasswordRequest;
 import we.link.response.ApiResponse;
 import we.link.response.AuthResponse;
 import we.link.service.IAuthService;
@@ -18,6 +21,7 @@ import we.link.service.IAuthService;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AuthController {
 	
 	private final IAuthService authService;
@@ -45,7 +49,26 @@ public class AuthController {
 	public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
 		return ResponseEntity.ok(
 					new ApiResponse<>(
-							true, "User LoggedIn Successfully!", authService.login(request)							)
+							true, "User LoggedIn Successfully!", authService.login(request)			
+					)
+				);
+	}
+	
+	@PostMapping("verify-resetPassword-otp")
+	public ResponseEntity<ApiResponse<Void>> verifyResetPasswordOtp(@Valid @RequestBody VerifyOtpResetPasswordRequest request) {
+		authService.verifyOtpToResetPassword(request);
+		return ResponseEntity.ok(
+					new ApiResponse<>(
+							true, "OTP Verified!", null
+					)
+				);
+	}
+	
+	@PostMapping("reset-password")
+	public ResponseEntity<ApiResponse<Void>> resetUsersPassword(@Valid @RequestBody ResetPasswordRequest request) {
+		authService.resetPassword(request);
+		return ResponseEntity.ok(
+					new ApiResponse<>(true, "Password Reset Successfully!", null)
 				);
 	}
 	
