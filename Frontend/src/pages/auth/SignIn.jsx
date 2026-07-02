@@ -5,6 +5,7 @@ import { useSignIn } from "../../hooks/useSignIn";
 export const SignIn = () => {
   const {
     formData,
+    errors,
     showPassword,
     isLoading,
     handleChange,
@@ -26,8 +27,15 @@ export const SignIn = () => {
             placeholder="john@gmail.com"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border rounded-xl px-4 py-3 outline-none focus:border-blue-600"
+            className={`w-full border rounded-xl px-4 py-3 outline-none focus:border-blue-600 ${
+              errors.email
+                ? "border-red-500 focus:border-red-500"
+                : "border-gray-300"
+            }`}
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
 
         <div>
@@ -39,17 +47,25 @@ export const SignIn = () => {
               placeholder="********"
               value={formData.password}
               onChange={handleChange}
-              className="w-full border rounded-xl px-4 py-3 outline-none focus:border-blue-600"
+              className={`w-full border rounded-xl px-4 py-3 outline-none focus:border-blue-600 ${
+                errors.password
+                  ? "border-red-500 focus:border-red-500"
+                  : "border-gray-300"
+              }`}
             />
 
             <button
               type="button"
               onClick={togglePassword}
-              className="absolute right-4 top-1/2 -translate-y-1/2"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
+
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
 
           <div className="flex justify-end mt-2">
             <Link
@@ -63,7 +79,7 @@ export const SignIn = () => {
 
         <button
           disabled={isLoading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold disabled:opacity-50"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-xl py-3 font-semibold disabled:opacity-50 transition-colors"
         >
           {isLoading ? "Signing In..." : "Sign In"}
         </button>
