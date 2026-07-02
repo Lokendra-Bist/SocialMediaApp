@@ -6,7 +6,7 @@ export const CreatePostCard = () => {
   const [content, setContent] = useState("");
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm transition-all duration-200 focus-within:shadow-md focus-within:border-slate-200">
+    <div className="sticky top-0 z-20 bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
       <div className="flex gap-4">
         <img
           src=""
@@ -22,7 +22,6 @@ export const CreatePostCard = () => {
           className="w-full bg-transparent outline-none resize-none text-slate-800 placeholder-slate-400 text-base py-1 leading-relaxed"
         />
       </div>
-
       <div className="flex justify-between items-center mt-3 pt-3 border-t border-slate-100">
         <label className="cursor-pointer flex items-center gap-2 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors duration-200 text-sm font-medium">
           <FaImage size={18} className="text-blue-500" />
