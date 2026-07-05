@@ -12,13 +12,14 @@ export const CreatePostCard = () => {
     handleSubmit,
     errors,
     loading,
+    profile,
   } = useCreatePost();
 
   return (
     <div className="sticky top-0 z-20 bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
       <div className="flex gap-4">
         <img
-          src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+          src={profile?.imageUrl}
           alt="User avatar"
           className="w-11 h-11 rounded-full object-cover ring-2 ring-slate-100"
         />
@@ -68,7 +69,7 @@ export const CreatePostCard = () => {
         </label>
 
         <button
-          disabled={!content.trim() || !imagePreview}
+          disabled={loading || (!content.trim() && !imagePreview)}
           onClick={handleSubmit}
           className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:hover:bg-blue-600 text-white font-medium px-5 py-2 rounded-xl flex items-center gap-2 transition-all duration-200 active:scale-98 shadow-sm shadow-blue-100 disabled:shadow-none"
         >

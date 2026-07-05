@@ -23,6 +23,7 @@ export const verifyOTPAndRegisterUser = async (data) => {
 export const loginUser = async (data) => {
   try {
     const response = await authApi.login(data);
+    console.log("Login User", response.data);
     return response.data;
   } catch (error) {
     console.error("Error while loggedIn:", error);

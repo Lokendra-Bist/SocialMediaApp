@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { createPost } from "../services/PostsService";
+import { getMyProfile } from "../services/UserProfileService";
 
 export const useCreatePost = () => {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -78,6 +80,22 @@ export const useCreatePost = () => {
     return Object.keys(tempErrors).length === 0;
   };
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        setLoading(true);
+        const profileData = await getMyProfile();
+        setProfile(profileData.data);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
+
   const handleSubmit = async () => {
     if (!validate()) return;
 
@@ -114,5 +132,6 @@ export const useCreatePost = () => {
     handleSubmit,
     errors,
     loading,
+    profile,
   };
 };

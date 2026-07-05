@@ -1,8 +1,11 @@
 import LeftSidebar from "../../components/sidebar/LeftSidebar";
 import { CreatePostCard } from "../../components/post/CreatePostCard";
-import PostCard from "../../components/post/PostCard";
+import { PostCard } from "../../components/post/PostCard";
+import { usePostCard } from "../../hooks/usePostCard";
 
 export const Home = () => {
+  const { posts } = usePostCard();
+
   return (
     <>
       <div className="flex min-h-screen bg-gray-100">
@@ -14,7 +17,9 @@ export const Home = () => {
               <CreatePostCard />
             </div>
 
-            <PostCard className="mt-6" />
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
           </div>
         </main>
       </div>

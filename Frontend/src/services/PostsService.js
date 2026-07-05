@@ -9,3 +9,14 @@ export const createPost = async (postData) => {
     throw error;
   }
 };
+
+export const fetchAllPosts = async () => {
+  try {
+    const response = await postApi.getAllPosts();
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    throw error;
+  }
+};
