@@ -3,6 +3,7 @@ package we.link.mapper;
 import we.link.entity.Role;
 import we.link.entity.Users;
 import we.link.request.VerifyOtpRequest;
+import we.link.response.UserResponse;
 
 public class UserMapper {
 		
@@ -16,6 +17,18 @@ public class UserMapper {
 				.password(password)
 				.role(Role.ROLE_USER)
 				.build();
+	}
+	
+	public static UserResponse toResponse(Users user) {
+		return new UserResponse(
+					user.getId(),
+					user.getFirstName(),
+					user.getLastName(),
+					user.getDob(),
+					user.getGender(),
+					user.getEmail(),
+					user.getRole().name()
+				);
 	}
 
 }

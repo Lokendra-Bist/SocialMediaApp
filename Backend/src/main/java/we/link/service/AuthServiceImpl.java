@@ -95,7 +95,7 @@ public class AuthServiceImpl implements IAuthService {
 		verification.setVerified(true);
 		emailVerificationRepo.save(verification);
 		
-		return new AuthResponse(jwtUtil.generateToken(request.email()), savedUser);
+		return new AuthResponse(jwtUtil.generateToken(request.email()), UserMapper.toResponse(savedUser));
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class AuthServiceImpl implements IAuthService {
 			Users user = userRepo.findByEmail(request.email())
 							.orElseThrow(() -> new ResourceNotFoundException("User Not Found!"));
 			
-			return new AuthResponse(jwtUtil.generateToken(request.email()), user);
+			return new AuthResponse(jwtUtil.generateToken(request.email()), UserMapper.toResponse(user));
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 			throw new BadRequestException("Error While LogIn" + e.getMessage());
