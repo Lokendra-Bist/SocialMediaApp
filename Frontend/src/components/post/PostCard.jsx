@@ -1,7 +1,10 @@
 import { FiHeart, FiMessageCircle, FiShare2 } from "react-icons/fi";
 import { formatPostDate } from "../../utils/formatPostDate";
+import { useLike } from "../../hooks/useLike";
 
 export const PostCard = ({ post }) => {
+  const { likesCount, liked, handleLike } = useLike(post);
+
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
       <div className="flex items-center gap-3">
@@ -37,10 +40,14 @@ export const PostCard = ({ post }) => {
       )}
 
       <div className="flex gap-8 mt-5 border-t pt-4">
-        <button className="flex items-center gap-2 text-slate-500 hover:text-red-500">
-          <FiHeart size={20} />
+        <button
+          onClick={handleLike}
+          className={`flex items-center gap-2 transition
+        ${liked ? "text-red-500" : "text-slate-500 hover:text-red-500"}`}
+        >
+          <FiHeart size={20} fill={liked ? "currentColor" : "none"} />
 
-          <span>{post.likesCount}</span>
+          <span>{likesCount}</span>
         </button>
 
         <button className="flex items-center gap-2 text-slate-500 hover:text-blue-500">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { fetchAllPosts } from "../services/PostsService";
 
-export const usePostCard = () => {
+export const usePosts = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

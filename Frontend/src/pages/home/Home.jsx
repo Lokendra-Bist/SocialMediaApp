@@ -1,10 +1,10 @@
 import LeftSidebar from "../../components/sidebar/LeftSidebar";
 import { CreatePostCard } from "../../components/post/CreatePostCard";
 import { PostCard } from "../../components/post/PostCard";
-import { usePostCard } from "../../hooks/usePostCard";
+import { usePosts } from "../../hooks/usePosts";
 
 export const Home = () => {
-  const { posts } = usePostCard();
+  const { posts } = usePosts();
 
   return (
     <>
