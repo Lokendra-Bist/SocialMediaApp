@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,32 +20,29 @@ import lombok.Setter;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Getter
 @Setter
-public class Posts {
+@Builder
+public class Likes {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false)
-	private String imageUrl;
-	
-	@Column(nullable = false)
-	private String content;
-	
-	@Column(nullable = false)
-	private Long likesCount = 0L;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private Users user;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id", nullable = false)
+	private Posts post;
+	
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
 	
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updatedAt;
+	@PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 
 }

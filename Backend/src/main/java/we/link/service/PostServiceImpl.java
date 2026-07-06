@@ -1,5 +1,8 @@
 package we.link.service;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import we.link.entity.Posts;
 import we.link.entity.Users;
 import we.link.mapper.PostsMapper;
+import we.link.repository.ILikesRepo;
 import we.link.repository.IPostsRepo;
 import we.link.request.PostCreateRequest;
 import we.link.response.PostCreateResponse;
@@ -22,6 +26,8 @@ public class PostServiceImpl implements IPostsMgmtService {
 	private final IPostsRepo postsRepo;
 	
 	private final ICloudinaryImageStorageService storageService;
+	
+	private final ILikesRepo likesRepo;
 
 	@Override
 	public PostCreateResponse createPost(PostCreateRequest request, Users user) {
@@ -32,9 +38,20 @@ public class PostServiceImpl implements IPostsMgmtService {
 	}
 
 	@Override
-	public Page<PostResponse> getAllPosts(int page, int size) {
+	public Page<PostResponse> getAllPosts(int page, int size, Users user) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-		return postsRepo.findAll(pageable).map(PostsMapper::toPostResponse);
+		Page<Posts> posts = postsRepo.findAll(pageable);
+		
+		Set<Long> likesPostsId = new HashSet<>(
+					likesRepo.findLikedPostIdsByUser(user.getId())
+				);
+		
+		return posts.map(post -> 
+							PostsMapper.toPostResponse(
+										post,
+										likesPostsId.contains(post.getId())
+									)
+						);
 	}
 
 }

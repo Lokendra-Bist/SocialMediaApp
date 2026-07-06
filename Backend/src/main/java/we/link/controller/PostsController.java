@@ -42,11 +42,12 @@ public class PostsController {
 	@GetMapping("/get-all-posts")
 	public ResponseEntity<ApiResponse<Page<PostResponse>>> getAllPosts(
 														@RequestParam(defaultValue = "0") int page,
-														@RequestParam(defaultValue = "10") int size
+														@RequestParam(defaultValue = "10") int size,
+														@AuthenticationPrincipal CustomUserDetails details
 													) {
 		return ResponseEntity.ok(
 					new ApiResponse<>(
-							true, "Post Fetched!", postService.getAllPosts(page, size)
+							true, "Post Fetched!", postService.getAllPosts(page, size, details.getUser())
 						)
 				);
 	}

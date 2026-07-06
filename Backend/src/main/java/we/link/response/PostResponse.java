@@ -14,6 +14,10 @@ public record PostResponse(
 
         String lastName,
         
+        Long likesCount,
+        
+        boolean liked,
+        
         String profileImageUrl,
 
         LocalDateTime createdAt
