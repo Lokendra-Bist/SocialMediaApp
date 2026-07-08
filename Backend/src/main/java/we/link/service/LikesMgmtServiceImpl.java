@@ -22,6 +22,8 @@ public class LikesMgmtServiceImpl implements ILikesMgmtService {
 	private final ILikesRepo likesRepo;
 
 	private final IPostsRepo postsRepo;
+	
+	private final INotificationMgmtService notificationMgmtService;
 
 	@Transactional
 	@Override
@@ -42,6 +44,8 @@ public class LikesMgmtServiceImpl implements ILikesMgmtService {
 			likesRepo.save(LikesMapper.toEntity(user, post));
 			post.setLikesCount(post.getLikesCount() + 1);
 			liked = true;
+
+			notificationMgmtService.sendLikeNotification(user, post);
 		}
 
 		return new LikesResponse(liked, post.getLikesCount());

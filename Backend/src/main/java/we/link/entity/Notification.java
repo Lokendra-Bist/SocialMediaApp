@@ -4,12 +4,15 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,35 +21,43 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
 @ToString
-public class Posts {
+public class Notification {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false)
-	private String imageUrl;
-	
-	@Column(nullable = false)
-	private String content;
-	
-	@Column(nullable = false)
-	private Long likesCount = 0L;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "sender_id", nullable = false)
+	private Users sender;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private Users user;
+	@JoinColumn(name = "receiver_id", nullable = false)
+	private Users receiver;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id", nullable = false)
+	private Posts post;
+	
+	@Enumerated(EnumType.STRING)
+	private NotificationType type;
+	
+	@Column(name = "is_read", nullable = false)
+	private Boolean isRead;
 	
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt;
 	
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updatedAt;
+	@PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+        isRead = false;
+    }
 
 }
