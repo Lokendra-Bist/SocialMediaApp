@@ -7,6 +7,8 @@ import { ForgotPassword } from "../pages/auth/ForgotPassword";
 import { ResetPassword } from "../pages/auth/ResetPassword";
 import { PublicRoute } from "../routes/PublicRoute";
 import { ProtectedRoute } from "../routes/ProtectedRoute";
+import { Notification } from "../pages/notification/Notification";
+import { MainLayout } from "../layouts/MainLayout";
 
 export const AppRoutes = () => {
   return (
@@ -15,10 +17,13 @@ export const AppRoutes = () => {
         path="/"
         element={
           <ProtectedRoute>
-            <Home />
+            <MainLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Home />} />
+        <Route path="/notifications" element={<Notification />} />
+      </Route>
 
       <Route
         element={

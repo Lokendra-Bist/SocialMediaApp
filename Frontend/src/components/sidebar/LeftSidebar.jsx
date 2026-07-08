@@ -14,10 +14,12 @@ import {
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
+import { useNotification } from "../../hooks/useNotification";
+
 const menuItems = [
   { name: "Home", icon: <FaHome size={20} />, path: "/" },
   { name: "Explore", icon: <FaCompass size={20} /> },
-  { name: "Notifications", icon: <FaBell size={20} /> },
+  { name: "Notifications", icon: <FaBell size={20} />, path: "/notifications" },
   { name: "Messages", icon: <FaEnvelope size={20} /> },
   { name: "Favorites", icon: <FaHeart size={20} /> },
   { name: "Profile", icon: <FaUser size={20} /> },
@@ -31,6 +33,8 @@ export default function LeftSidebar() {
   const { logout } = useAuth();
 
   const navigate = useNavigate();
+
+  const { unreadCount } = useNotification();
 
   return (
     <>
@@ -106,7 +110,33 @@ export default function LeftSidebar() {
                   }}
                   className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-zinc-300 hover:bg-zinc-800 hover:text-white transition"
                 >
-                  {item.icon}
+                  {item.name === "Notifications" ? (
+                    <div className="relative">
+                      <FaBell size={20} />
+
+                      {unreadCount > 0 && (
+                        <span
+                          className="
+            absolute
+            -top-2
+            -right-2
+            bg-red-500
+            text-white
+            rounded-full
+            text-[10px]
+            w-5
+            h-5
+            flex
+            items-center
+            justify-center"
+                        >
+                          {unreadCount}
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    item.icon
+                  )}
                   <span className="font-medium">{item.name}</span>
                 </button>
               </li>
