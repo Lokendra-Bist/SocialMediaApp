@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import { useNotification } from "../hooks/useNotification";
@@ -7,42 +7,54 @@ import { useAuth } from "../hooks/useAuth";
 
 export const useNotificationSocket = () => {
   const { addNotification } = useNotification();
-
   const { token, isAuthenticated } = useAuth();
 
+  const clientRef = useRef(null);
+
   useEffect(() => {
-    if (!isAuthenticated || !token) {
-      return;
-    }
+    if (!isAuthenticated || !token) return;
+
+    console.log("Initializing secure STOMP connection...");
 
     const client = new Client({
       webSocketFactory: () => new SockJS("http://localhost:2058/WeLink/ws"),
-
-      reconnectDelay: 5000,
-
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+      debug: (msg) => console.log("STOMP Debug:", msg),
 
       onConnect: () => {
-        console.log("CONNECTED");
+        console.log("WebSocket connected successfully!");
 
-        client.subscribe("/user/queue/notifications", (message) => {
-          console.log("MESSAGE RECEIVED");
+        client.subscribe("/user/topic/notifications", (message) => {
+          if (message.body) {
+            const data = JSON.parse(message.body);
+            console.log("Real-time Notification Received:", data);
 
-          console.log(message.body);
+            addNotification(data);
 
-          const notification = JSON.parse(message.body);
-
-          addNotification(notification);
-
-          toast.success(`${notification.senderName} liked your post ❤️`);
+            toast.success(
+              `${data.senderName || "Someone"} liked your post! ❤️`,
+            );
+          }
         });
+      },
+      onStompError: (frame) => {
+        console.error("STOMP Error:", frame.headers["message"]);
       },
     });
 
     client.activate();
+    clientRef.current = client;
 
-    return () => client.deactivate();
-  }, []);
+    return () => {
+      if (clientRef.current) {
+        console.log("Disconnecting WebSocket...");
+        clientRef.current.deactivate();
+      }
+    };
+  }, [token, isAuthenticated, addNotification]);
 };

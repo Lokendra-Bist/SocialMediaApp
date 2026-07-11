@@ -1,4 +1,5 @@
 import { useNotification } from "../../hooks/useNotification";
+import { formatPostDate } from "../../utils/formatPostDate";
 
 export const Notification = () => {
   const { notifications } = useNotification();
@@ -15,19 +16,26 @@ export const Notification = () => {
         notifications.map((notification) => (
           <div
             key={notification.id}
-            className="bg-white rounded-xl shadow p-4 mb-4"
+            className="bg-white rounded-xl shadow p-4 mb-4 hover:bg-gray-50 transition-colors"
           >
-            <div className="flex gap-3">
+            <div className="flex gap-3 items-center">
               <img
                 src={notification.senderProfileUrl}
-                className="w-12 h-12 rounded-full"
+                className="w-12 h-12 rounded-full object-cover"
                 alt=""
               />
 
               <div>
-                <h4 className="font-semibold">{notification.senderName}</h4>
+                <p className="text-sm text-gray-900">
+                  <span className="font-semibold mr-1">
+                    {notification.senderName}
+                  </span>
+                  liked your post ❤️
+                </p>
 
-                <p>liked your post ❤️</p>
+                <span className="text-xs text-blue-600 font-medium block mt-0.5">
+                  {formatPostDate(notification.createdAt)}
+                </span>
               </div>
             </div>
           </div>

@@ -10,7 +10,6 @@ export const useLike = (post) => {
     if (loadingLike) return;
 
     setLoadingLike(true);
-
     const previousLiked = liked;
 
     setLiked(!previousLiked);
