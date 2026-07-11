@@ -36,7 +36,7 @@ public class Posts {
 	@Column(nullable = false)
 	private String content;
 	
-	@Column(nullable = false)
+	@Column(name = "likes_count", nullable = false)
 	private Long likesCount = 0L;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

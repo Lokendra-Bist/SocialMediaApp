@@ -22,30 +22,33 @@ public class NotificationMgmtServiceImpl implements INotificationMgmtService {
 	private final INotificationRepo notificationRepo;
 	
 	private final SimpMessagingTemplate messagingTemplate;
-
-	@Override
-	public void sendLikeNotification(Users sender, Posts post) {
-		Users receiver = post.getUser();
-
-		if(sender.getId().equals(receiver.getId())) return;
-
-		Notification savedNotification = notificationRepo.save(
-											Notification.builder()
-												.sender(sender)
-												.receiver(receiver)
-												.post(post)
-												.type(NotificationType.LIKE)
-												.build()
-											);
-		
-		messagingTemplate.convertAndSendToUser(
-									receiver.getEmail(),
-									"/queue/notifications",
-									NotificationMapper.toResponse(savedNotification)
-								);
-		
-		System.out.println("Notification send from service notifi");
-	}
+	
+		@Override
+		public void sendLikeNotification(Users sender, Posts post) {
+			Users receiver = post.getUser();
+		    
+			if(sender.getId().equals(receiver.getId())) {
+				System.out.println("User can't send trigger like notification for their own posts");
+				return;
+			}
+	
+			Notification savedNotification = notificationRepo.save(
+												Notification.builder()
+													.sender(sender)
+													.receiver(receiver)
+													.post(post)
+													.type(NotificationType.LIKE)
+													.build()
+												);
+			
+			NotificationResponse response = NotificationMapper.toResponse(savedNotification);
+	
+			messagingTemplate.convertAndSendToUser(
+										receiver.getEmail(),
+										"/topic/notifications",
+										response
+									);
+		}
 
 	@Override
     @Transactional(readOnly = true)
@@ -67,7 +70,7 @@ public class NotificationMgmtServiceImpl implements INotificationMgmtService {
         List<Notification> notifications = notificationRepo
         										.findByReceiverOrderByCreatedAtDesc(receiver);
 
-        notifications.forEach(n -> n.setIsRead(false));
+        notifications.forEach(n -> n.setIsRead(true));
 
         notificationRepo.saveAll(notifications);
     }

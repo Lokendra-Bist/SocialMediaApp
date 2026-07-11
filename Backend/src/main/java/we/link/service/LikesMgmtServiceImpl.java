@@ -47,7 +47,6 @@ public class LikesMgmtServiceImpl implements ILikesMgmtService {
 
 			notificationMgmtService.sendLikeNotification(user, post);
 		}
-
 		return new LikesResponse(liked, post.getLikesCount());
 	}
 

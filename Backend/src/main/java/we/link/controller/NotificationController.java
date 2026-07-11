@@ -18,7 +18,7 @@ import we.link.service.INotificationMgmtService;
 public class NotificationController {
 	
 	private final INotificationMgmtService notificationService;
-	
+
 	@GetMapping
     public ResponseEntity<?> getNotifications(@AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.ok(
