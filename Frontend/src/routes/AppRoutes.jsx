@@ -9,6 +9,7 @@ import { PublicRoute } from "../routes/PublicRoute";
 import { ProtectedRoute } from "../routes/ProtectedRoute";
 import { Notification } from "../pages/notification/Notification";
 import { MainLayout } from "../layouts/MainLayout";
+import { Messages } from "../pages/message/Messages";
 
 export const AppRoutes = () => {
   return (
@@ -23,6 +24,7 @@ export const AppRoutes = () => {
       >
         <Route index element={<Home />} />
         <Route path="/notifications" element={<Notification />} />
+        <Route path="/messages" element={<Messages />} />
       </Route>
 
       <Route

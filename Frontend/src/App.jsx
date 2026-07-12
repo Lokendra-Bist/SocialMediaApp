@@ -3,6 +3,7 @@ import { AppRoutes } from "./routes/AppRoutes";
 import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { useNotificationSocket } from "./hooks/useNotificationSocket";
+import { MessageProvider } from "./context/MessageContext";
 
 function SocketInitializer() {
   useNotificationSocket();
@@ -16,8 +17,10 @@ function App() {
       <Toaster position="top-center" />
       <AuthProvider>
         <NotificationProvider>
-          <SocketInitializer />
-          <AppRoutes />
+          <MessageProvider>
+            <SocketInitializer />
+            <AppRoutes />
+          </MessageProvider>
         </NotificationProvider>
       </AuthProvider>
     </>

@@ -1,13 +1,16 @@
 import { useEffect, useRef } from "react";
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
-import { useNotification } from "../hooks/useNotification";
+import { useNotification } from "./useNotification";
 import toast from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
+import { useMessage } from "./useMessage";
 
 export const useNotificationSocket = () => {
   const { addNotification } = useNotification();
   const { token, isAuthenticated } = useAuth();
+
+  const { addMessage } = useMessage();
 
   const clientRef = useRef(null);
 
@@ -40,6 +43,16 @@ export const useNotificationSocket = () => {
               `${data.senderName || "Someone"} liked your post! ❤️`,
             );
           }
+        });
+
+        client.subscribe("/user/topic/messages", (message) => {
+          const data = JSON.parse(message.body);
+
+          console.log("New Message", data);
+
+          addMessage(data);
+
+          toast.success(`${data.senderName} sent you a message`);
         });
       },
       onStompError: (frame) => {
