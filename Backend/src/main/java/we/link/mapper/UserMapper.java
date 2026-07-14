@@ -4,6 +4,7 @@ import we.link.entity.Role;
 import we.link.entity.Users;
 import we.link.request.VerifyOtpRequest;
 import we.link.response.UserResponse;
+import we.link.response.UserSearchResponse;
 
 public class UserMapper {
 		
@@ -28,6 +29,14 @@ public class UserMapper {
 					user.getGender(),
 					user.getEmail(),
 					user.getRole().name()
+				);
+	}
+	
+	public static UserSearchResponse toUserSearchResponse(Users user) {
+		return new UserSearchResponse(
+					user.getId(),
+					user.getFirstName() + " " + user.getLastName(),
+					user.getUserProfile().getProfileImageUrl()
 				);
 	}
 
