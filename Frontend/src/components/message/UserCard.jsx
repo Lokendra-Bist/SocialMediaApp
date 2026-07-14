@@ -5,14 +5,12 @@ export const UserCard = ({ user, onSelect }) => {
       className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100"
     >
       <img
-        src={user.profileImageUrl}
+        src={user.profileUrl}
         className="w-12 h-12 rounded-full object-cover"
       />
 
       <div>
-        <h4 className="font-semibold">
-          {user.firstName} {user.lastName}
-        </h4>
+        <h4 className="font-semibold">{user.name}</h4>
       </div>
     </div>
   );

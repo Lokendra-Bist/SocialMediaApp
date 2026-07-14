@@ -9,3 +9,13 @@ export const sendMessages = async (receiverId, text) => {
     throw error;
   }
 };
+
+export const getMyConversations = async () => {
+  try {
+    const response = await messageApi.getConversations();
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching conversations:", error);
+    throw error;
+  }
+};

@@ -15,7 +15,8 @@ export const useUsers = () => {
     try {
       setLoading(true);
       const response = await searchUsers(text);
-      setUsers(response.data.data);
+      console.log("Search Users: ", response.data);
+      setUsers(response.data);
     } finally {
       setLoading(false);
     }

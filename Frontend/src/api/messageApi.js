@@ -7,4 +7,8 @@ export const messageApi = {
       content: text,
     });
   },
+
+  getConversations() {
+    return api.get("/api/conversation/conversations");
+  },
 };

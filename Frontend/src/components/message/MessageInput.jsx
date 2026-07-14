@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { sendMessages } from "../../services/MessageService";
+import { useConversation } from "../../hooks/useConversation";
 
 export const MessageInput = ({ receiverId }) => {
   const [text, setText] = useState("");
+
+  const { loadConversations } = useConversation();
 
   const send = async () => {
     if (!text.trim()) return;
 
     await sendMessages(receiverId, text);
-
+    loadConversations();
     setText("");
   };
 

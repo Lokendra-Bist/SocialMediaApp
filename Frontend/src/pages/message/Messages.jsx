@@ -5,16 +5,28 @@ import { SearchBar } from "../../components/message/SearchBar";
 import { useUsers } from "../../hooks/useUsers";
 import { UserList } from "../../components/message/UserList";
 import { FiPlus, FiX } from "react-icons/fi";
+import { useConversation } from "../../hooks/useConversation";
 
 export const Messages = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { users, search } = useUsers();
 
-  const activeConversations = users.filter((user) => user.hasRowHistory);
+  const { conversations, setConversations } = useConversation();
 
   const handleSelectUser = (user) => {
     setSelectedUser(user);
+
+    setConversations((prev) => {
+      const exists = prev.some((c) => c.id === user.id);
+
+      if (exists) {
+        return prev;
+      }
+
+      return [user, ...prev];
+    });
+
     setIsModalOpen(false);
   };
 
@@ -37,7 +49,7 @@ export const Messages = () => {
             Recent Chats
           </div>
           <ConversationList
-            users={activeConversations}
+            users={conversations}
             selectUser={setSelectedUser}
           />
         </div>
