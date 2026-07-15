@@ -1,5 +1,7 @@
 package we.link.service;
 
+import java.util.List;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +63,19 @@ public class MessageMgmtServiceImpl implements IMessageMgmtService {
 									"/topic/messages",
 									response
 								);
+		messagingTemplate.convertAndSendToUser(
+							        sender.getEmail(),
+							        "/topic/messages",
+							        response
+								);
+	}
+
+	@Override
+	public List<MessageResponse> getChatHistory(Users currentUser, Long otherUserId) {
+		return msgRepo.getConversation(currentUser.getId(), otherUserId)
+						.stream()
+						.map(MessageMapper::toResponse)
+						.toList();
 	}
 
 }

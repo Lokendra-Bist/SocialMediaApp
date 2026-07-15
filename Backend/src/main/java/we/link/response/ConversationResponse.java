@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public record ConversationResponse(
 
-		Long userId,
+		Long id,
 
 		String name,
 
