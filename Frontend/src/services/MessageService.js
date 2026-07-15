@@ -19,3 +19,13 @@ export const getMyConversations = async () => {
     throw error;
   }
 };
+
+export const getChatHistory = async (userId) => {
+  try {
+    const response = await messageApi.getChatHistory(userId);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching chat history:", error);
+    throw error;
+  }
+};

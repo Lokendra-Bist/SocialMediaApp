@@ -11,4 +11,10 @@ export const messageApi = {
   getConversations() {
     return api.get("/api/conversation/conversations");
   },
+
+  getChatHistory(userId) {
+    console.log("UserId for chat history in messageapi: ", userId);
+
+    return api.get(`/api/message/${userId}`);
+  },
 };

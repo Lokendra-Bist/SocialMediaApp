@@ -5,12 +5,14 @@ import { useNotification } from "./useNotification";
 import toast from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
 import { useMessage } from "./useMessage";
+import { useConversation } from "./useConversation";
 
 export const useNotificationSocket = () => {
   const { addNotification } = useNotification();
   const { token, isAuthenticated } = useAuth();
 
   const { addMessage } = useMessage();
+  const { updateConversation } = useConversation();
 
   const clientRef = useRef(null);
 
@@ -51,7 +53,7 @@ export const useNotificationSocket = () => {
           console.log("New Message", data);
 
           addMessage(data);
-
+          updateConversation(data);
           toast.success(`${data.senderName} sent you a message`);
         });
       },

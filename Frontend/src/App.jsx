@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { useNotificationSocket } from "./hooks/useNotificationSocket";
 import { MessageProvider } from "./context/MessageContext";
+import { ConversationProvider } from "./context/ConversationContext";
 
 function SocketInitializer() {
   useNotificationSocket();
@@ -17,10 +18,12 @@ function App() {
       <Toaster position="top-center" />
       <AuthProvider>
         <NotificationProvider>
-          <MessageProvider>
-            <SocketInitializer />
-            <AppRoutes />
-          </MessageProvider>
+          <ConversationProvider>
+            <MessageProvider>
+              <SocketInitializer />
+              <AppRoutes />
+            </MessageProvider>
+          </ConversationProvider>
         </NotificationProvider>
       </AuthProvider>
     </>

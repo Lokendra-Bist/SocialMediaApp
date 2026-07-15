@@ -8,17 +8,21 @@ import { FiPlus, FiX } from "react-icons/fi";
 import { useConversation } from "../../hooks/useConversation";
 
 export const Messages = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { users, search } = useUsers();
 
-  const { conversations, setConversations } = useConversation();
+  const {
+    conversations,
+    setConversations,
+    selectedConversation,
+    setSelectedConversation,
+  } = useConversation();
 
   const handleSelectUser = (user) => {
-    setSelectedUser(user);
+    setSelectedConversation(user);
 
     setConversations((prev) => {
-      const exists = prev.some((c) => c.id === user.id);
+      const exists = prev.some((c) => c.id === user.userId);
 
       if (exists) {
         return prev;
@@ -50,14 +54,18 @@ export const Messages = () => {
           </div>
           <ConversationList
             users={conversations}
-            selectUser={setSelectedUser}
+            selectedUser={selectedConversation}
+            selectUser={setSelectedConversation}
           />
         </div>
       </div>
 
       <div className="flex-1 bg-gray-50">
-        {selectedUser ? (
-          <ChatWindow receiver={selectedUser} />
+        {selectedConversation ? (
+          <ChatWindow
+            key={selectedConversation.id}
+            receiver={selectedConversation}
+          />
         ) : (
           <div className="h-full flex items-center justify-center text-gray-400">
             Select a conversation or start a new one
