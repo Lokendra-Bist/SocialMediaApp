@@ -22,7 +22,7 @@ export const Messages = () => {
     setSelectedConversation(user);
 
     setConversations((prev) => {
-      const exists = prev.some((c) => c.id === user.userId);
+      const exists = prev.some((c) => c.id === user.id);
 
       if (exists) {
         return prev;

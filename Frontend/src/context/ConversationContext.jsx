@@ -28,24 +28,66 @@ export const ConversationProvider = ({ children }) => {
     loadConversations();
   }, [token]);
 
-  const updateConversation = (message) => {
-    setConversations((prev) => {
-      const otherUser =
-        message.senderId === user.id ? message.receiverId : message.senderId;
+  // const updateConversation = (message) => {
+  //   setConversations((prev) => {
+  //     const otherUser =
+  //       message.senderId === user.id ? message.receiverId : message.senderId;
 
-      const existing = prev.find((c) => c.id === otherUser);
+  //     const existing = prev.find((c) => c.id === otherUser);
+
+  //     if (!existing) {
+  //       return prev;
+  //     }
+
+  //     const updated = {
+  //       ...existing,
+  //       lastMessage: message.content,
+  //       lastMessageTime: message.sentAt,
+  //     };
+
+  //     return [updated, ...prev.filter((c) => c.id !== otherUser)];
+  //   });
+  // };
+
+  const updateConversation = (message) => {
+    if (!user?.id) return;
+
+    const isMyMessage = message.senderId === user.id;
+    const otherUserId = isMyMessage ? message.receiverId : message.senderId;
+
+    setConversations((prev) => {
+      const existing = prev.find(
+        (conversation) => conversation.id === otherUserId,
+      );
 
       if (!existing) {
+        // The receiver's first message from this sender.
+        if (!isMyMessage) {
+          const newConversation = {
+            id: message.senderId,
+            name: message.senderName,
+            profileImageUrl: message.senderProfileUrl,
+            lastMessage: message.content,
+            lastMessageTime: message.sentAt,
+          };
+
+          return [newConversation, ...prev];
+        }
+
+        // The sender already adds a new conversation when selecting a user.
         return prev;
       }
 
-      const updated = {
+      const updatedConversation = {
         ...existing,
         lastMessage: message.content,
         lastMessageTime: message.sentAt,
       };
 
-      return [updated, ...prev.filter((c) => c.id !== otherUser)];
+      return [
+        updatedConversation,
+        ...prev.filter((conversation) => conversation.id !== otherUserId),
+      ];
     });
   };
 

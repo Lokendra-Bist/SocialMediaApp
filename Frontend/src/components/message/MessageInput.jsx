@@ -8,6 +8,7 @@ export const MessageInput = ({ receiverId }) => {
     if (!text.trim()) return;
 
     await sendMessages(receiverId, text);
+
     setText("");
   };
 

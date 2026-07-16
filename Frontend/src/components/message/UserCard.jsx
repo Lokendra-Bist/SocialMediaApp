@@ -5,7 +5,7 @@ export const UserCard = ({ user, onSelect }) => {
       className="flex items-center gap-3 p-3 cursor-pointer hover:bg-gray-100"
     >
       <img
-        src={user.profileUrl}
+        src={user.profileImageUrl}
         className="w-12 h-12 rounded-full object-cover"
       />
 
