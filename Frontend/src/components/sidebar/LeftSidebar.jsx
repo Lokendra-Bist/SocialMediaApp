@@ -22,7 +22,7 @@ const menuItems = [
   { name: "Notifications", icon: <FaBell size={20} />, path: "/notifications" },
   { name: "Messages", icon: <FaEnvelope size={20} />, path: "/messages" },
   { name: "Favorites", icon: <FaHeart size={20} /> },
-  { name: "Profile", icon: <FaUser size={20} /> },
+  { name: "Profile", icon: <FaUser size={20} />, path: "/my-profile" },
   { name: "Settings", icon: <FaCog size={20} /> },
   { name: "LogOut", icon: <FaSignOutAlt size={20} />, action: "logout" },
 ];

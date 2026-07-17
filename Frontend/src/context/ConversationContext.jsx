@@ -28,27 +28,6 @@ export const ConversationProvider = ({ children }) => {
     loadConversations();
   }, [token]);
 
-  // const updateConversation = (message) => {
-  //   setConversations((prev) => {
-  //     const otherUser =
-  //       message.senderId === user.id ? message.receiverId : message.senderId;
-
-  //     const existing = prev.find((c) => c.id === otherUser);
-
-  //     if (!existing) {
-  //       return prev;
-  //     }
-
-  //     const updated = {
-  //       ...existing,
-  //       lastMessage: message.content,
-  //       lastMessageTime: message.sentAt,
-  //     };
-
-  //     return [updated, ...prev.filter((c) => c.id !== otherUser)];
-  //   });
-  // };
-
   const updateConversation = (message) => {
     if (!user?.id) return;
 
@@ -61,7 +40,6 @@ export const ConversationProvider = ({ children }) => {
       );
 
       if (!existing) {
-        // The receiver's first message from this sender.
         if (!isMyMessage) {
           const newConversation = {
             id: message.senderId,
@@ -74,7 +52,6 @@ export const ConversationProvider = ({ children }) => {
           return [newConversation, ...prev];
         }
 
-        // The sender already adds a new conversation when selecting a user.
         return prev;
       }
 

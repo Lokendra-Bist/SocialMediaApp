@@ -10,6 +10,7 @@ import { ProtectedRoute } from "../routes/ProtectedRoute";
 import { Notification } from "../pages/notification/Notification";
 import { MainLayout } from "../layouts/MainLayout";
 import { Messages } from "../pages/message/Messages";
+import { MyProfile } from "../pages/profile/MyProfile";
 
 export const AppRoutes = () => {
   return (
@@ -25,6 +26,7 @@ export const AppRoutes = () => {
         <Route index element={<Home />} />
         <Route path="/notifications" element={<Notification />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/my-profile" element={<MyProfile />} />
       </Route>
 
       <Route
