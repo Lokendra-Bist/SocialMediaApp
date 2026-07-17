@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import we.link.entity.UserProfile;
 import we.link.entity.Users;
 import we.link.request.ProfileUploadRequest;
+import we.link.response.ProfileResponse;
 import we.link.response.UserProfileResponse;
 
 public class UserProfileMapper {
@@ -26,6 +27,23 @@ public class UserProfileMapper {
 					profile.getProfileImageUrl(),
 					profile.getCreatedAt(),
 					profile.getUpdatedAt()
+				);
+	}
+	
+	public static ProfileResponse toProfileResponse(Users user, Long followersCount, Long followingCount) {
+		UserProfile profile = user.getUserProfile();
+		String bio = (profile != null) ? profile.getBio() : "";
+        String profileImageUrl = (profile != null) ? profile.getProfileImageUrl() : null;
+        String coverImageUrl = (profile != null) ? profile.getCoverImageUrl() : null;
+        
+		return new ProfileResponse(
+					user.getId(),
+					user.getFirstName() + " " + user.getLastName(),
+					profileImageUrl,
+					coverImageUrl,
+					bio,
+					followersCount,
+					followingCount
 				);
 	}
 

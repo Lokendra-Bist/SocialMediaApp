@@ -13,8 +13,10 @@ import lombok.RequiredArgsConstructor;
 import we.link.entity.CustomUserDetails;
 import we.link.request.ProfileUploadRequest;
 import we.link.response.ApiResponse;
+import we.link.response.ProfileResponse;
 import we.link.response.UserProfileResponse;
 import we.link.service.IUserProfileMgmtService;
+
 
 @RestController
 @RequestMapping("/api/user-profile")
@@ -37,5 +39,17 @@ public class UserProfileController {
 				new ApiResponse<>(true, "Image Retrieved!", userProfileMgmtService.getUserProfile(userDetails.getUser()))
 			);
 	}
+	
+	@GetMapping("/myProfile")
+	public ResponseEntity<ApiResponse<ProfileResponse>> getLoggedinUserProfile(@AuthenticationPrincipal CustomUserDetails details) {
+		return ResponseEntity.ok(
+					new ApiResponse<>(
+								true,
+								"Profile Fetched",
+								userProfileMgmtService.getMyProfile(details.getUser())
+							)
+				);
+	}
+	
 
 }

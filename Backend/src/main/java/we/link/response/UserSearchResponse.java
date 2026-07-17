@@ -6,6 +6,6 @@ public record UserSearchResponse(
 
 		String name,
 		
-		String profileUrl
+		String profileImageUrl
 		
 ) {}
