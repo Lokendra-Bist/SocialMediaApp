@@ -2,6 +2,7 @@ package we.link.service;
 
 import java.util.Optional;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import we.link.mapper.LikesMapper;
 import we.link.repository.ILikesRepo;
 import we.link.repository.IPostsRepo;
 import we.link.response.LikesResponse;
+import we.link.response.PostLikeResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,8 @@ public class LikesMgmtServiceImpl implements ILikesMgmtService {
 	private final IPostsRepo postsRepo;
 	
 	private final INotificationMgmtService notificationMgmtService;
+	
+	private final SimpMessagingTemplate simpMessagingTemplate;
 
 	@Transactional
 	@Override
@@ -35,18 +39,32 @@ public class LikesMgmtServiceImpl implements ILikesMgmtService {
 		Optional<Likes> existing = likesRepo.findByUserAndPost(user, post);
 
 		boolean liked;
-
 		if (existing.isPresent()) {
 			likesRepo.delete(existing.get());
 			post.setLikesCount(post.getLikesCount() - 1);
 			liked = false;
-		} else {
+//			simpMessagingTemplate.convertAndSend(
+//						"/topic/posts",
+//						new PostLikeResponse(post.getId(), post.getLikesCount(), false)
+//					);
+		} else {	
 			likesRepo.save(LikesMapper.toEntity(user, post));
 			post.setLikesCount(post.getLikesCount() + 1);
 			liked = true;
-
+//			simpMessagingTemplate.convertAndSend(
+//						"/topic/posts",
+//						new PostLikeResponse(post.getId(), post.getLikesCount(), true)
+//					);
+			
 			notificationMgmtService.sendLikeNotification(user, post);
 		}
+		postsRepo.save(post);
+		
+		simpMessagingTemplate.convertAndSend(
+					"/topic/posts",
+					new PostLikeResponse(post.getId(), post.getLikesCount())
+				);
+		
 		return new LikesResponse(liked, post.getLikesCount());
 	}
 

@@ -54,4 +54,21 @@ public class PostServiceImpl implements IPostsMgmtService {
 						);
 	}
 
+	@Override
+	public Page<PostResponse> getMyPosts(int page, int size, Users user) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Page<Posts> pageData = postsRepo.findByUser_Id(pageable, user.getId());
+		
+		Set<Long> likesPostId = new HashSet<>(
+					likesRepo.findLikedPostIdsByUser(user.getId())
+				);
+		
+		return pageData.map(post -> 
+					PostsMapper.toPostResponse(
+							post,
+							likesPostId.contains(post.getId())
+						)
+				);
+	}
+
 }

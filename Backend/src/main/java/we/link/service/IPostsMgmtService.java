@@ -12,5 +12,7 @@ public interface IPostsMgmtService {
 	PostCreateResponse createPost(PostCreateRequest request, Users user);
 	
 	Page<PostResponse> getAllPosts(int page, int size, Users user);
+	
+	Page<PostResponse> getMyPosts(int page, int size, Users user);
 
 }

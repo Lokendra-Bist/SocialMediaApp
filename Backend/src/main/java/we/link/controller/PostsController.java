@@ -51,5 +51,20 @@ public class PostsController {
 						)
 				);
 	}
+	
+	@GetMapping("/get-my-posts")
+	public ResponseEntity<ApiResponse<Page<PostResponse>>> getMyPosts(
+									@RequestParam(defaultValue = "0") int page,
+									@RequestParam(defaultValue = "5") int size,
+									@AuthenticationPrincipal CustomUserDetails details
+							) {
+		return ResponseEntity.ok(
+					new ApiResponse<>(
+								true,
+								"Post Fetched!",
+								postService.getMyPosts(page, size, details.getUser())
+							)
+				);
+	}
 
 }
