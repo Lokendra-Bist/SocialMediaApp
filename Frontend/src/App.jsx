@@ -5,6 +5,7 @@ import { NotificationProvider } from "./context/NotificationContext";
 import { useNotificationSocket } from "./hooks/useNotificationSocket";
 import { MessageProvider } from "./context/MessageContext";
 import { ConversationProvider } from "./context/ConversationContext";
+import { PostProvider } from "./context/PostContext";
 
 function SocketInitializer() {
   useNotificationSocket();
@@ -20,8 +21,10 @@ function App() {
         <NotificationProvider>
           <ConversationProvider>
             <MessageProvider>
-              <SocketInitializer />
-              <AppRoutes />
+              <PostProvider>
+                <SocketInitializer />
+                <AppRoutes />
+              </PostProvider>
             </MessageProvider>
           </ConversationProvider>
         </NotificationProvider>

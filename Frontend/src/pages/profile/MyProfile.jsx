@@ -1,4 +1,3 @@
-import { FiEdit2 } from "react-icons/fi";
 import { CoverSection } from "../../components/profile/CoverSection";
 import { AvatarSection } from "../../components/profile/AvatarSection";
 import { ProfileStats } from "../../components/profile/ProfileStats";
@@ -39,11 +38,6 @@ export const MyProfile = () => {
             onUpload={(file) => handlePhotoUpload(file, "profile")}
             onDelete={() => handlePhotoDelete("profile")}
           />
-
-          <button className="flex items-center gap-2 px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 font-semibold text-sm rounded-xl border border-gray-200 transition-all duration-200 shadow-sm active:scale-95">
-            <FiEdit2 size={14} />
-            Edit Profile
-          </button>
         </div>
 
         <div className="space-y-4">

@@ -6,12 +6,15 @@ import toast from "react-hot-toast";
 import { useAuth } from "../hooks/useAuth";
 import { useMessage } from "./useMessage";
 import { useConversation } from "./useConversation";
+import { usePosts } from "../hooks/usePosts";
 
 export const useNotificationSocket = () => {
   const { addNotification } = useNotification();
   const { token, isAuthenticated } = useAuth();
   const { addMessage } = useMessage();
   const { updateConversation } = useConversation();
+
+  const { updatePostLike } = usePosts();
 
   const clientRef = useRef(null);
   const handlersRef = useRef({});
@@ -21,8 +24,9 @@ export const useNotificationSocket = () => {
       addNotification,
       addMessage,
       updateConversation,
+      updatePostLike,
     };
-  }, [addNotification, addMessage, updateConversation]);
+  }, [addNotification, addMessage, updateConversation, updatePostLike]);
 
   useEffect(() => {
     if (!isAuthenticated || !token) return;
@@ -52,6 +56,14 @@ export const useNotificationSocket = () => {
           handlersRef.current.updateConversation(data);
 
           toast.success(`${data.senderName} sent you a message`);
+        });
+
+        client.subscribe("/topic/posts", (message) => {
+          if (!message.body) return;
+
+          const data = JSON.parse(message.body);
+
+          handlersRef.current.updatePostLike(data.postId, data.likesCount);
         });
       },
     });

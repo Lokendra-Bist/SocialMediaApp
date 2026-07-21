@@ -24,10 +24,21 @@ export const fetchAllPosts = async () => {
 export const togglePostLike = async (postId) => {
   try {
     const response = await postApi.toggleLike(postId);
-    console.log(response.data);
+    console.log("TooglePostLike in service", response.data);
     return response.data;
   } catch (error) {
     console.error("Error toggling like:", error);
+    throw error;
+  }
+};
+
+export const getMyPosts = async () => {
+  try {
+    const response = await postApi.getMyPosts();
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
     throw error;
   }
 };

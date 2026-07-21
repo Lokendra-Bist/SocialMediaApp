@@ -1,43 +1,6 @@
-import { useState, useEffect } from "react";
-import { fetchAllPosts } from "../services/PostsService";
+import { useContext } from "react";
+import { PostContext } from "../context/PostContext";
 
 export const usePosts = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  const loadPosts = async () => {
-    try {
-      setLoading(true);
-      const response = await fetchAllPosts();
-      setPosts(response.data.content);
-    } catch (err) {
-      setError(err.response?.data?.message || "Unable to load posts.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const fetchInitialPosts = async () => {
-      try {
-        setLoading(true);
-        const response = await fetchAllPosts();
-        setPosts(response.data.content);
-      } catch (err) {
-        setError(err.response?.data?.message || "Unable to load posts.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInitialPosts();
-  }, []);
-
-  return {
-    posts,
-    loading,
-    error,
-    reloadPosts: loadPosts,
-  };
+  return useContext(PostContext);
 };

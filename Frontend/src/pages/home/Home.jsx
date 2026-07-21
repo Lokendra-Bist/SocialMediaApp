@@ -1,9 +1,23 @@
+import { useEffect, useState } from "react";
 import { CreatePostCard } from "../../components/post/CreatePostCard";
-import { PostCard } from "../../components/post/PostCard";
+import { FeedPostCard } from "../../components/post/FeedPostCard";
 import { usePosts } from "../../hooks/usePosts";
+import { fetchAllPosts } from "../../services/PostsService";
 
 export const Home = () => {
-  const { posts } = usePosts();
+  const [selectedPost, setSelectedPost] = useState(null);
+
+  const { posts, setPosts } = usePosts();
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      const response = await fetchAllPosts();
+      console.log("Fetched Posts: ", response.data);
+      setPosts(response.data.content);
+    };
+
+    loadPosts();
+  }, [setPosts]);
 
   return (
     <>
@@ -12,9 +26,16 @@ export const Home = () => {
           <CreatePostCard />
         </div>
 
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
+        <div className="space-y-4">
+          {posts.map((post) => (
+            <FeedPostCard
+              key={post.id}
+              post={post}
+              onOpenComments={setSelectedPost}
+              onSharePost={(post) => console.log(post)}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
