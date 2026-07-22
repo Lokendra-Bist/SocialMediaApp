@@ -14,7 +14,7 @@ export const useNotificationSocket = () => {
   const { addMessage } = useMessage();
   const { updateConversation } = useConversation();
 
-  const { updatePostLike } = usePosts();
+  const { updatePostLike, updateMyPostLike } = usePosts();
 
   const clientRef = useRef(null);
   const handlersRef = useRef({});
@@ -25,8 +25,15 @@ export const useNotificationSocket = () => {
       addMessage,
       updateConversation,
       updatePostLike,
+      updateMyPostLike,
     };
-  }, [addNotification, addMessage, updateConversation, updatePostLike]);
+  }, [
+    addNotification,
+    addMessage,
+    updateConversation,
+    updatePostLike,
+    updateMyPostLike,
+  ]);
 
   useEffect(() => {
     if (!isAuthenticated || !token) return;
@@ -64,6 +71,7 @@ export const useNotificationSocket = () => {
           const data = JSON.parse(message.body);
 
           handlersRef.current.updatePostLike(data.postId, data.likesCount);
+          handlersRef.current.updateMyPostLike(data.postId, data.likesCount);
         });
       },
     });

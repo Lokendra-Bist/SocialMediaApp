@@ -2,9 +2,13 @@ import { CoverSection } from "../../components/profile/CoverSection";
 import { AvatarSection } from "../../components/profile/AvatarSection";
 import { ProfileStats } from "../../components/profile/ProfileStats";
 import { useProfile } from "../../hooks/useProfile";
+import { useMyPosts } from "../../hooks/useMyPosts";
+import { FeedPostCard } from "../../components/post/FeedPostCard";
 
 export const MyProfile = () => {
   const { profile, updateProfilePhotos } = useProfile();
+
+  const { posts, loading } = useMyPosts();
 
   const handlePhotoUpload = async (file, type) => {
     if (file.size > 5 * 1024 * 1024) {
@@ -58,6 +62,18 @@ export const MyProfile = () => {
             followers={profile?.followersCount}
             following={profile?.followingCount}
           />
+        </div>
+
+        <div className="mt-8 space-y-4">
+          {loading ? (
+            <p>Loading posts...</p>
+          ) : posts.length === 0 ? (
+            <div className="rounded-xl border bg-white p-10 text-center text-gray-500">
+              You haven't posted anything yet.
+            </div>
+          ) : (
+            posts.map((post) => <FeedPostCard key={post.id} post={post} />)
+          )}
         </div>
       </div>
     </div>

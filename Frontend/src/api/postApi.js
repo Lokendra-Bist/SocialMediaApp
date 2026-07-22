@@ -13,5 +13,5 @@ export const toggleLike = async (postId) => {
 };
 
 export const getMyPosts = async (page = 0, size = 5) => {
-  return await api.get(`/api/post/get-my-posts?page=${page}&size=${size}`);
+  return await api.get(`/api/posts/get-my-posts?page=${page}&size=${size}`);
 };

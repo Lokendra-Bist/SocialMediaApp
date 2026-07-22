@@ -43,18 +43,10 @@ public class LikesMgmtServiceImpl implements ILikesMgmtService {
 			likesRepo.delete(existing.get());
 			post.setLikesCount(post.getLikesCount() - 1);
 			liked = false;
-//			simpMessagingTemplate.convertAndSend(
-//						"/topic/posts",
-//						new PostLikeResponse(post.getId(), post.getLikesCount(), false)
-//					);
 		} else {	
 			likesRepo.save(LikesMapper.toEntity(user, post));
 			post.setLikesCount(post.getLikesCount() + 1);
 			liked = true;
-//			simpMessagingTemplate.convertAndSend(
-//						"/topic/posts",
-//						new PostLikeResponse(post.getId(), post.getLikesCount(), true)
-//					);
 			
 			notificationMgmtService.sendLikeNotification(user, post);
 		}

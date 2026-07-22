@@ -4,6 +4,13 @@ export const PostContext = createContext();
 
 export const PostProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
+  const [myPosts, setMyPosts] = useState([]);
+
+  const updateMyPostLike = (postId, likesCount) => {
+    setMyPosts((prev) =>
+      prev.map((post) => (post.id === postId ? { ...post, likesCount } : post)),
+    );
+  };
 
   const updateOwnLike = (postId, liked, likesCount) => {
     setPosts((prev) =>
@@ -39,6 +46,9 @@ export const PostProvider = ({ children }) => {
         setPosts,
         updatePostLike,
         updateOwnLike,
+        updateMyPostLike,
+        myPosts,
+        setMyPosts,
       }}
     >
       {children}
