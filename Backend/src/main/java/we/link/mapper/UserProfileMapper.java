@@ -4,16 +4,14 @@ import java.time.LocalDateTime;
 
 import we.link.entity.UserProfile;
 import we.link.entity.Users;
-import we.link.request.ProfileUploadRequest;
 import we.link.response.ProfileResponse;
 import we.link.response.UserProfileResponse;
 
 public class UserProfileMapper {
 	
-	public static UserProfile profileUploadToEntity(ProfileUploadRequest request, String imageUrl, Users user) {
+	public static UserProfile profileUploadToEntity(String imageUrl, Users user) {
 		return UserProfile.builder()
 					.profileImageUrl(imageUrl)
-					.bio(request.bio())
 					.user(user)
 					.createdAt(LocalDateTime.now())
 					.updatedAt(LocalDateTime.now())

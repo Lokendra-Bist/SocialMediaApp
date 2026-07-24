@@ -1,6 +1,10 @@
 package we.link.service;
 
+
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import we.link.entity.UserProfile;
@@ -10,7 +14,6 @@ import we.link.mapper.UserProfileMapper;
 import we.link.repository.IFollowRepo;
 import we.link.repository.IUserProfileRepo;
 import we.link.repository.IUserRepo;
-import we.link.request.ProfileUploadRequest;
 import we.link.response.ProfileResponse;
 import we.link.response.UserProfileResponse;
 
@@ -27,11 +30,23 @@ public class UserProfileMgmtServiceImpl implements IUserProfileMgmtService {
 	private final IFollowRepo followRepo;
 
 	@Override
-	public UserProfileResponse uploadProfile(ProfileUploadRequest request, Users user) {
-		String uploadedImageUrl = cloudinaryImageStorageService.uploadImage(request.image());
+	public UserProfileResponse uploadProfile(MultipartFile image, Users user) {
+		String uploadedImageUrl = cloudinaryImageStorageService.uploadImage(image);
 		
-		UserProfile savedProfile = profileRepo.save(UserProfileMapper.profileUploadToEntity(request, uploadedImageUrl, user));
-		return UserProfileMapper.toProfileUploadResponse(savedProfile);
+		UserProfile profile = profileRepo.findByUserId(user.getId())
+		        .orElseGet(() -> {
+		            UserProfile p = new UserProfile();
+		            p.setUser(user);
+		            p.setCreatedAt(LocalDateTime.now());
+		            return p;
+		        });
+
+		profile.setProfileImageUrl(uploadedImageUrl);
+		profile.setUpdatedAt(LocalDateTime.now());
+
+		profileRepo.save(profile);
+
+		return UserProfileMapper.toProfileUploadResponse(profile);
 	}
 
 	@Override

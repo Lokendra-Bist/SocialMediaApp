@@ -34,7 +34,6 @@ public class UserProfile {
 	
 	private String coverImageUrl;
 		
-	@Column(nullable = false)
 	private String bio;
 	
 	@OneToOne(fetch = FetchType.LAZY)
