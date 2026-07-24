@@ -71,4 +71,21 @@ public class UserProfileMgmtServiceImpl implements IUserProfileMgmtService {
 		return UserProfileMapper.toProfileResponse(currentUser, followersCount, followingCount);
 	}
 
+	@Override
+	public UserProfileResponse uploadCoverPhoto(MultipartFile image, Users user) {
+		String imageUrl = cloudinaryImageStorageService.uploadImage(image);
+		UserProfile profile = profileRepo.findByUserId(user.getId())
+									.orElseGet(() -> {
+										UserProfile p = new UserProfile();
+										p.setUser(user);
+										p.setCreatedAt(LocalDateTime.now());
+										return p;
+									});
+		profile.setCoverImageUrl(imageUrl);
+		profile.setUpdatedAt(LocalDateTime.now());
+		profileRepo.save(profile);
+		
+		return UserProfileMapper.toProfileUploadResponse(profile);
+	}
+
 }

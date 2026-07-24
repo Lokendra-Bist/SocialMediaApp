@@ -50,5 +50,16 @@ public class UserProfileController {
 				);
 	}
 	
+	@PostMapping("/upload-cover")
+	public ResponseEntity<ApiResponse<UserProfileResponse>> uploadCover(@RequestParam MultipartFile file,
+								@AuthenticationPrincipal CustomUserDetails details) {
+		return ResponseEntity.ok(
+					new ApiResponse<>(
+								true,
+								"Photo Uploaded Successfully!",
+								userProfileMgmtService.uploadCoverPhoto(file, details.getUser())
+							)
+				);
+	}
 
 }

@@ -13,5 +13,7 @@ public interface IUserProfileMgmtService {
 	UserProfileResponse getUserProfile(Users user);
 	
 	ProfileResponse getMyProfile(Users user);
+	
+	UserProfileResponse uploadCoverPhoto(MultipartFile image,  Users user);
 
 }
