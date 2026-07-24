@@ -1,9 +1,22 @@
 import { useEffect, useState } from "react";
-import { fetchMyOwnProfile } from "../services/UserProfileService";
+import {
+  fetchMyOwnProfile,
+  uploadUserProfile,
+} from "../services/UserProfileService";
 
 export const useProfile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const updateProfilePhotos = async (file) => {
+    try {
+      const response = await uploadUserProfile(file);
+      console.log("Uploaded profile response: ", response.data);
+    } catch (error) {
+      console.error("Error uploading user profile:", error);
+      throw error;
+    }
+  };
 
   const loadProfile = async () => {
     try {
@@ -24,5 +37,6 @@ export const useProfile = () => {
     loading,
     loadProfile,
     setProfile,
+    updateProfilePhotos,
   };
 };

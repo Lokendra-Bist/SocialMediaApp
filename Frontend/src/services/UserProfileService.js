@@ -21,3 +21,13 @@ export const fetchMyOwnProfile = async () => {
     throw error;
   }
 };
+
+export const uploadUserProfile = async (file) => {
+  try {
+    const response = await userProfileApi.uploadUserProfile(file);
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading user profile:", error);
+    throw error;
+  }
+};

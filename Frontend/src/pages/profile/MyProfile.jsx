@@ -4,6 +4,7 @@ import { ProfileStats } from "../../components/profile/ProfileStats";
 import { useProfile } from "../../hooks/useProfile";
 import { useMyPosts } from "../../hooks/useMyPosts";
 import { FeedPostCard } from "../../components/post/FeedPostCard";
+import toast from "react-hot-toast";
 
 export const MyProfile = () => {
   const { profile, updateProfilePhotos } = useProfile();
@@ -15,10 +16,11 @@ export const MyProfile = () => {
       alert("File size exceeds limit (Max 5MB)");
       return;
     }
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("type", type);
-    await updateProfilePhotos(formData);
+
+    if (type == "profile") {
+      await updateProfilePhotos(file);
+      toast.success("Profile Uploaded Successfull!");
+    }
   };
 
   const handlePhotoDelete = async (type) => {
