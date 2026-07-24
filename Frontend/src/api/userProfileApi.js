@@ -13,3 +13,9 @@ export const uploadUserProfile = async (file) => {
   formData.append("file", file);
   return await api.post("/api/user-profile/upload-profile", formData);
 };
+
+export const uploadCover = async (image) => {
+  const formData = new FormData();
+  formData.append("file", image);
+  return await api.post("/api/user-profile/upload-cover", formData);
+};

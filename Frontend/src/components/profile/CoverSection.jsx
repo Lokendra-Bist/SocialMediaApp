@@ -23,7 +23,7 @@ export const CoverSection = ({ imageUrl, onUpload, onDelete }) => {
   };
 
   return (
-    <div className="relative h-64 w-full bg-gray-100 group overflow-hidden">
+    <div className="relative h-64 w-full bg-gray-100 group overflow-visible">
       <input
         type="file"
         ref={fileInputRef}

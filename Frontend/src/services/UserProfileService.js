@@ -31,3 +31,13 @@ export const uploadUserProfile = async (file) => {
     throw error;
   }
 };
+
+export const uploadCoverImage = async (image) => {
+  try {
+    const response = await userProfileApi.uploadCover(image);
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading cover photo:", error);
+    throw error;
+  }
+};

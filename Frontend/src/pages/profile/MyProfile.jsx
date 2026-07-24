@@ -5,6 +5,7 @@ import { useProfile } from "../../hooks/useProfile";
 import { useMyPosts } from "../../hooks/useMyPosts";
 import { FeedPostCard } from "../../components/post/FeedPostCard";
 import toast from "react-hot-toast";
+import { uploadCoverImage } from "../../services/UserProfileService";
 
 export const MyProfile = () => {
   const { profile, updateProfilePhotos } = useProfile();
@@ -12,6 +13,8 @@ export const MyProfile = () => {
   const { posts, loading } = useMyPosts();
 
   const handlePhotoUpload = async (file, type) => {
+    if (!file) return;
+
     if (file.size > 5 * 1024 * 1024) {
       alert("File size exceeds limit (Max 5MB)");
       return;
@@ -20,6 +23,9 @@ export const MyProfile = () => {
     if (type == "profile") {
       await updateProfilePhotos(file);
       toast.success("Profile Uploaded Successfull!");
+    } else if (type == "cover") {
+      await uploadCoverImage(file);
+      toast.success("Cover Image Uploaded!");
     }
   };
 
