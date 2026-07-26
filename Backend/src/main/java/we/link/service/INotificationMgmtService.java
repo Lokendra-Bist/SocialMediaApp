@@ -15,5 +15,7 @@ public interface INotificationMgmtService {
     Long getUnreadCount(Users receiver);
 
     void markAllAsRead(Users receiver);
+    
+    void sendCommentNotification(Users sender, Posts post);
 	
 }

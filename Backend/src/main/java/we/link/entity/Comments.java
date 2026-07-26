@@ -10,12 +10,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @AllArgsConstructor
@@ -23,33 +23,29 @@ import lombok.ToString;
 @Builder
 @Getter
 @Setter
-@ToString
-public class Posts {
+public class Comments {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false)
-	private String imageUrl;
-	
-	@Column(nullable = false)
-	private String content;
-	
-	@Column(name = "likes_count", nullable = false)
-	private Long likesCount = 0L;
-	
-	@Column(name = "comment_count", nullable = false)
-	private Long commentCount = 0L;
-	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private Users user;
 	
-	@Column(name = "created_at", nullable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id", nullable = false)
+	private Posts post;
+	
+	@Column(nullable = false)
+	private String content; 
+	
+	@Column(name = "created_at")
 	private LocalDateTime createdAt;
 	
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updatedAt;
+	@PrePersist
+	void onCreate() {
+		this.createdAt = LocalDateTime.now();
+	}
 
 }

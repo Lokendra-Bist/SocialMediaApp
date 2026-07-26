@@ -72,4 +72,29 @@ public class NotificationMgmtServiceImpl implements INotificationMgmtService {
 		notificationRepo.saveAll(notifications);
 	}
 
+	@Override
+	public void sendCommentNotification(Users sender, Posts post) {
+		Users receiver = post.getUser();
+		
+		if(sender.getId().equals(receiver.getId())) {
+			System.out.println("Cannot trigger notification for own comments");
+			return;
+		}
+		
+		Notification savedNotification = notificationRepo.save(
+					Notification.builder()
+						.sender(sender)
+						.receiver(receiver)
+						.post(post)
+						.type(NotificationType.COMMENT)
+						.build()
+				);
+		NotificationResponse response = NotificationMapper.toResponse(savedNotification);
+		messagingTemplate.convertAndSendToUser(
+					receiver.getEmail(),
+					"/topic/notifications",
+					response
+				);
+	}
+
 }
