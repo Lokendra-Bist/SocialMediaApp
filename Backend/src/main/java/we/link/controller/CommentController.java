@@ -1,7 +1,10 @@
 package we.link.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +35,17 @@ public class CommentController {
 								true,
 								"Notification Sent",
 								commentService.addComment(details.getUser(), postId, request)
+							)
+				);
+	}
+	
+	@GetMapping("/get-comments/{postId}")
+	public ResponseEntity<ApiResponse<List<CommentResponse>>> fetchComments(@PathVariable Long postId) {
+		return ResponseEntity.ok(
+					new ApiResponse<>(
+								true,
+								"Comments Fetched",
+								commentService.getCommentByPost(postId)
 							)
 				);
 	}

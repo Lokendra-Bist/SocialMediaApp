@@ -17,6 +17,7 @@ public class PostsMapper {
 				.content(request.content())
                 .imageUrl(imageUrl)
                 .likesCount(0L)
+                .commentCount(0L)
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())

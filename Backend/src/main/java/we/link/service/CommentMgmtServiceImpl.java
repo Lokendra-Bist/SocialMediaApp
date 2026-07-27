@@ -1,5 +1,7 @@
 package we.link.service;
 
+import java.util.List;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +54,18 @@ public class CommentMgmtServiceImpl implements ICommentsMgmtService {
 	    notificationService.sendCommentNotification(user, post);
 
 	    return response;
+	}
+
+	@Override
+	public List<CommentResponse> getCommentByPost(Long postId) {
+		Posts post = postRepo.findById(postId)
+						.orElseThrow(() -> new ResourceNotFoundException("Post not found with id"));
+		
+		return commentRepo.findByPost_Id(post.getId())
+					.stream()
+					.map(CommentMapper::toResponse)
+					.toList();
+				
 	}
 
 }
