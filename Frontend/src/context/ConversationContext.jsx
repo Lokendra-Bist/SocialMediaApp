@@ -30,7 +30,6 @@ export const ConversationProvider = ({ children }) => {
 
   const updateConversation = (message) => {
     if (!user?.id) return;
-
     const isMyMessage = message.senderId === user.id;
     const otherUserId = isMyMessage ? message.receiverId : message.senderId;
 

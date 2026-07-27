@@ -3,11 +3,27 @@ import { CreatePostCard } from "../../components/post/CreatePostCard";
 import { FeedPostCard } from "../../components/post/FeedPostCard";
 import { usePosts } from "../../hooks/usePosts";
 import { fetchAllPosts } from "../../services/PostsService";
+import { PostDetailModal } from "../../components/modal/PostDetailModal";
+import { useLike } from "../../hooks/useLike";
 
 export const Home = () => {
   const [selectedPost, setSelectedPost] = useState(null);
 
   const { posts, setPosts } = usePosts();
+
+  const [open, setOpen] = useState(false);
+
+  const { handleLike, loadingLike } = useLike();
+
+  const openComments = (post) => {
+    setSelectedPost(post);
+    setOpen(true);
+  };
+
+  const closeModal = () => {
+    setOpen(false);
+    setSelectedPost(null);
+  };
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -31,11 +47,19 @@ export const Home = () => {
             <FeedPostCard
               key={post.id}
               post={post}
-              onOpenComments={setSelectedPost}
-              onSharePost={(post) => console.log(post)}
+              onOpenComments={openComments}
             />
           ))}
         </div>
+
+        <PostDetailModal
+          open={open}
+          post={selectedPost}
+          onClose={closeModal}
+          onLike={handleLike}
+          // onCommentSubmit={handleComment}
+          isLiking={loadingLike}
+        />
       </div>
     </>
   );
