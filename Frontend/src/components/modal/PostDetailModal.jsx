@@ -8,13 +8,33 @@ import { useEffect } from "react";
 import { useComment } from "../../hooks/useComment";
 import { useCommentSocket } from "../../hooks/useCommentSocket";
 import { getComments } from "../../services/CommentService";
+import toast from "react-hot-toast";
+import { useLike } from "../../hooks/useLike";
+import { usePosts } from "../../hooks/usePosts";
 
-export const PostDetailModal = ({ open, post, onClose, onLike, isLiking }) => {
+export const PostDetailModal = ({ open, post, onClose }) => {
   if (!open || !post) return null;
 
   const { comments, setComments } = useComment();
 
   useCommentSocket(post?.id);
+
+  const { posts, myPosts } = usePosts();
+
+  const currentPost =
+    posts.find((p) => p.id === post.id) ||
+    myPosts.find((p) => p.id === post.id) ||
+    post;
+
+  const { handleLike, loadingLike } = useLike(currentPost.id);
+
+  const onLike = async () => {
+    try {
+      await handleLike();
+    } catch {
+      toast.error("Could not update the like. Please try again.");
+    }
+  };
 
   useEffect(() => {
     if (!open || !post) return;
@@ -27,54 +47,50 @@ export const PostDetailModal = ({ open, post, onClose, onLike, isLiking }) => {
   }, [open, post]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 flex justify-center items-center p-4">
-      <div className="relative bg-white rounded-2xl overflow-hidden w-full max-w-6xl h-[90vh] shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+      <div className="relative flex h-[92vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 bg-white rounded-full p-2 shadow cursor-pointer"
+          className="absolute right-4 top-4 z-20 rounded-full bg-white p-2 shadow"
         >
-          <FiX size={24} />
+          <FiX size={22} />
         </button>
 
-        <div className="grid grid-cols-2 h-full">
-          {/* LEFT */}
+        <div className="border-b px-5 py-4">
+          <PostHeader post={currentPost} />
+        </div>
 
-          <div className="bg-black flex justify-center items-center">
-            <img
-              src={post.imageUrl}
-              alt=""
-              className="max-h-full max-w-full object-contain"
+        <div className="flex-1 overflow-y-auto">
+          <div className="px-5 py-4">
+            {post.content && (
+              <PostContent content={currentPost.content} imageUrl={null} />
+            )}
+          </div>
+          {currentPost.imageUrl && (
+            <div className="bg-black">
+              <img
+                src={currentPost.imageUrl}
+                alt=""
+                className="max-h-[500px] w-full object-contain"
+              />
+            </div>
+          )}
+          <div className="border-b px-5 py-3">
+            <PostActions
+              liked={currentPost.liked}
+              likesCount={currentPost.likesCount}
+              commentsCount={currentPost.commentsCount}
+              isLiking={loadingLike}
+              onLike={onLike}
+              onComment={() => {}}
             />
           </div>
 
-          {/* RIGHT */}
+          <CommentList comments={comments} />
+        </div>
 
-          <div className="flex flex-col">
-            <div className="p-5 border-b">
-              <PostHeader post={post} />
-            </div>
-
-            <div className="px-5 py-4 border-b">
-              <PostContent content={post.content} imageUrl={null} />
-            </div>
-
-            <div className="px-5 border-b">
-              <PostActions
-                liked={post.liked}
-                likesCount={post.likesCount}
-                commentsCount={post.commentsCount}
-                isLiking={isLiking}
-                onLike={onLike}
-                onComment={() => {}}
-              />
-            </div>
-
-            <div className="flex-1 overflow-y-auto">
-              <CommentList comments={comments} />
-            </div>
-
-            <CommentInput posts={post} />
-          </div>
+        <div className="border-t bg-white p-4">
+          <CommentInput posts={currentPost} />
         </div>
       </div>
     </div>

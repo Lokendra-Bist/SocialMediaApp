@@ -4,7 +4,6 @@ import { FeedPostCard } from "../../components/post/FeedPostCard";
 import { usePosts } from "../../hooks/usePosts";
 import { fetchAllPosts } from "../../services/PostsService";
 import { PostDetailModal } from "../../components/modal/PostDetailModal";
-import { useLike } from "../../hooks/useLike";
 
 export const Home = () => {
   const [selectedPost, setSelectedPost] = useState(null);
@@ -12,8 +11,6 @@ export const Home = () => {
   const { posts, setPosts } = usePosts();
 
   const [open, setOpen] = useState(false);
-
-  const { handleLike, loadingLike } = useLike();
 
   const openComments = (post) => {
     setSelectedPost(post);
@@ -56,9 +53,7 @@ export const Home = () => {
           open={open}
           post={selectedPost}
           onClose={closeModal}
-          onLike={handleLike}
           // onCommentSubmit={handleComment}
-          isLiking={loadingLike}
         />
       </div>
     </>

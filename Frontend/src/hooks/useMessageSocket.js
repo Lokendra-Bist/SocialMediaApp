@@ -2,17 +2,16 @@ import { useEffect } from "react";
 import { useConversation } from "./useConversation";
 import { useMessage } from "./useMessage";
 import { useSocket } from "./useSocket";
-import toast from "react-hot-toast";
 
 export const useMessageSocket = () => {
-  const { client } = useSocket();
+  const { client, connected } = useSocket();
 
   const { addMessage } = useMessage();
 
   const { updateConversation } = useConversation();
 
   useEffect(() => {
-    if (!client?.connected) return;
+    if (!connected || !client) return;
     const subscription = client.subscribe("/user/topic/messages", (message) => {
       const msg = JSON.parse(message.body);
       console.log("Chat Data: ", msg);
@@ -22,5 +21,5 @@ export const useMessageSocket = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [client]);
+  }, [client, connected]);
 };

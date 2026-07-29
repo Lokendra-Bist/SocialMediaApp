@@ -1,25 +1,18 @@
 import { createContext, useState } from "react";
-import { useConversation } from "../hooks/useConversation";
 
 export const MessageContext = createContext();
 
 export const MessageProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
 
-  const { selectedConversation } = useConversation();
-
   const addMessage = (message) => {
-    if (!selectedConversation) return;
+    setMessages((prev) => {
+      const exists = prev.some((m) => m.id === message.id);
 
-    const belongsToCurrentChat =
-      message.senderId === selectedConversation.id ||
-      message.receiverId === selectedConversation.id;
+      if (exists) return prev;
 
-    if (!belongsToCurrentChat) {
-      return;
-    }
-
-    setMessages((prev) => [...prev, message]);
+      return [...prev, message];
+    });
   };
 
   const loadConversation = (conversation) => {

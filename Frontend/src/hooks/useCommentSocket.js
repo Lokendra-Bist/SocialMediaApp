@@ -3,12 +3,12 @@ import { useComment } from "./useComment";
 import { useSocket } from "./useSocket";
 
 export const useCommentSocket = (postId) => {
-  const { client } = useSocket();
+  const { client, connected } = useSocket();
 
   const { addRealtimeComment } = useComment();
 
   useEffect(() => {
-    if (!client?.connected) return;
+    if (!connected || !client) return;
 
     if (!postId) return;
 
@@ -16,10 +16,11 @@ export const useCommentSocket = (postId) => {
       `/topic/comments/${postId}`,
 
       (message) => {
-        addRealtimeComment(JSON.parse(message.body));
+        const data = JSON.parse(message.body);
+        addRealtimeComment(data);
       },
     );
 
     return () => subscription.unsubscribe();
-  }, [client, postId]);
+  }, [client, postId, connected]);
 };

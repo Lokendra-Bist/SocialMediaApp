@@ -2,13 +2,13 @@ import { useState } from "react";
 import { addComments } from "../../services/CommentService";
 import toast from "react-hot-toast";
 
-export const CommentInput = ({ post }) => {
+export const CommentInput = ({ posts }) => {
   const [content, setContent] = useState("");
 
   const handleSubmit = async () => {
     if (!content.trim()) return;
 
-    await addComments(post.id, content);
+    await addComments(posts.id, content);
     toast.success("Comment Success");
     setContent("");
   };
