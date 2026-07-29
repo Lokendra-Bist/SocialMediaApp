@@ -90,6 +90,7 @@ public class NotificationMgmtServiceImpl implements INotificationMgmtService {
 						.build()
 				);
 		NotificationResponse response = NotificationMapper.toResponse(savedNotification);
+		System.out.println("Message Notification Response: " + response);
 		messagingTemplate.convertAndSendToUser(
 					receiver.getEmail(),
 					"/topic/notifications",

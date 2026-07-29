@@ -16,6 +16,8 @@ public record PostResponse(
         
         Long likesCount,
         
+        Long commentsCount,
+        
         boolean liked,
         
         String profileImageUrl,

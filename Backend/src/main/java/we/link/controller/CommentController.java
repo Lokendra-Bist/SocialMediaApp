@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,7 @@ public class CommentController {
 	@PostMapping("/{postId}")
 	public ResponseEntity<ApiResponse<CommentResponse>> addComment(
 									@AuthenticationPrincipal CustomUserDetails details,
-									@Valid CommentRequest request,
+									@Valid @RequestBody CommentRequest request,
 									@PathVariable Long postId) {
 		return ResponseEntity.ok(
 					new ApiResponse<>(

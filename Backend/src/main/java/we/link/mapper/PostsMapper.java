@@ -45,6 +45,7 @@ public class PostsMapper {
 					post.getUser().getFirstName(),
 					post.getUser().getLastName(),
 					post.getLikesCount(),
+					post.getCommentCount(),
 					liked,
 					profileImageUrl,
 					post.getCreatedAt()
