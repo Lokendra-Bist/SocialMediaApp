@@ -15,6 +15,8 @@ public record CommentResponse(
         String senderProfileImage,
 
         String content,
+        
+        Long commentsCount,
 
         LocalDateTime createdAt
 		

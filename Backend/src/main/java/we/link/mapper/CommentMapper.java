@@ -30,6 +30,7 @@ public class CommentMapper {
 				comment.getUser().getFirstName() + " " + comment.getUser().getLastName(),
 				profileImageUrl,
 				comment.getContent(),
+				comment.getPost().getCommentCount(),
 				comment.getCreatedAt()
 			);
 	}
