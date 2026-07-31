@@ -32,7 +32,7 @@ public class PostsMapper {
 				);
 	}
 	
-	public static PostResponse toPostResponse(Posts post, boolean liked) {
+	public static PostResponse toPostResponse(Posts post, boolean liked, boolean saved) {
 		Users user = post.getUser();
 		String profileImageUrl = (user.getUserProfile() != null) 
 		        ? user.getUserProfile().getProfileImageUrl() 
@@ -47,6 +47,7 @@ public class PostsMapper {
 					post.getLikesCount(),
 					post.getCommentCount(),
 					liked,
+					saved,
 					profileImageUrl,
 					post.getCreatedAt()
 				);

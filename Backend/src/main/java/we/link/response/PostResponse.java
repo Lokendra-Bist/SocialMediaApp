@@ -20,6 +20,8 @@ public record PostResponse(
         
         boolean liked,
         
+        Boolean saved,
+        
         String profileImageUrl,
 
         LocalDateTime createdAt

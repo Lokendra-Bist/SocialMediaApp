@@ -15,6 +15,7 @@ import we.link.entity.Users;
 import we.link.mapper.PostsMapper;
 import we.link.repository.ILikesRepo;
 import we.link.repository.IPostsRepo;
+import we.link.repository.ISavedPostsRepo;
 import we.link.request.PostCreateRequest;
 import we.link.response.PostCreateResponse;
 import we.link.response.PostResponse;
@@ -28,6 +29,8 @@ public class PostServiceImpl implements IPostsMgmtService {
 	private final ICloudinaryImageStorageService storageService;
 	
 	private final ILikesRepo likesRepo;
+	
+	private final ISavedPostsRepo savedPostsRepo;
 
 	@Override
 	public PostCreateResponse createPost(PostCreateRequest request, Users user) {
@@ -46,10 +49,15 @@ public class PostServiceImpl implements IPostsMgmtService {
 					likesRepo.findLikedPostIdsByUser(user.getId())
 				);
 		
+		Set<Long> savedPostIds = new HashSet<>(
+		        savedPostsRepo.findSavedPostIdsByUser(user.getId())
+		);
+		
 		return posts.map(post -> 
 							PostsMapper.toPostResponse(
 										post,
-										likesPostsId.contains(post.getId())
+										likesPostsId.contains(post.getId()),
+										savedPostIds.contains(post.getId())
 									)
 						);
 	}
@@ -63,10 +71,15 @@ public class PostServiceImpl implements IPostsMgmtService {
 					likesRepo.findLikedPostIdsByUser(user.getId())
 				);
 		
+		Set<Long> savedPostIds = new HashSet<>(
+		        savedPostsRepo.findSavedPostIdsByUser(user.getId())
+		);
+		
 		return pageData.map(post -> 
 					PostsMapper.toPostResponse(
 							post,
-							likesPostId.contains(post.getId())
+							likesPostId.contains(post.getId()),
+							savedPostIds.contains(post.getId())
 						)
 				);
 	}
