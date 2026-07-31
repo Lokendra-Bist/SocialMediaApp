@@ -11,6 +11,7 @@ import { Notification } from "../pages/notification/Notification";
 import { MainLayout } from "../layouts/MainLayout";
 import { Messages } from "../pages/message/Messages";
 import { MyProfile } from "../pages/profile/MyProfile";
+import { SavedPosts } from "../pages/savedPost/SavedPosts";
 
 export const AppRoutes = () => {
   return (
@@ -27,6 +28,7 @@ export const AppRoutes = () => {
         <Route path="/notifications" element={<Notification />} />
         <Route path="/messages" element={<Messages />} />
         <Route path="/my-profile" element={<MyProfile />} />
+        <Route path="/favourites" element={<SavedPosts />} />
       </Route>
 
       <Route

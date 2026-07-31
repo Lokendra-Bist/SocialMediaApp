@@ -1,26 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { CreatePostCard } from "../../components/post/CreatePostCard";
 import { FeedPostCard } from "../../components/post/FeedPostCard";
 import { usePosts } from "../../hooks/usePosts";
 import { fetchAllPosts } from "../../services/PostsService";
 import { PostDetailModal } from "../../components/modal/PostDetailModal";
+import { usePostModal } from "../../hooks/usePostModal";
 
 export const Home = () => {
-  const [selectedPost, setSelectedPost] = useState(null);
-
   const { posts, setPosts } = usePosts();
 
-  const [open, setOpen] = useState(false);
-
-  const openComments = (post) => {
-    setSelectedPost(post);
-    setOpen(true);
-  };
-
-  const closeModal = () => {
-    setOpen(false);
-    setSelectedPost(null);
-  };
+  const { open, selectedPost, openPost, closePost } = usePostModal();
 
   useEffect(() => {
     const loadPosts = async () => {
@@ -41,20 +30,11 @@ export const Home = () => {
 
         <div className="space-y-4">
           {posts.map((post) => (
-            <FeedPostCard
-              key={post.id}
-              post={post}
-              onOpenComments={openComments}
-            />
+            <FeedPostCard key={post.id} post={post} onOpenComments={openPost} />
           ))}
         </div>
 
-        <PostDetailModal
-          open={open}
-          post={selectedPost}
-          onClose={closeModal}
-          // onCommentSubmit={handleComment}
-        />
+        <PostDetailModal open={open} post={selectedPost} onClose={closePost} />
       </div>
     </>
   );

@@ -1,14 +1,22 @@
 import toast from "react-hot-toast";
 import { useLike } from "../../hooks/useLike";
 import { PostCard } from "./PostCard";
+import { useSavedPosts } from "../../hooks/useSavedPosts";
 
 export const FeedPostCard = ({
   post,
   onOpenComments,
-  onSharePost,
   onAuthorClick,
+  onBookmarkSuccess,
 }) => {
   const { handleLike, loadingLike } = useLike(post.id);
+  const { handleFavourite } = useSavedPosts(post.id);
+
+  const handleBookmark = async () => {
+    const result = await handleFavourite();
+
+    onBookmarkSuccess?.(result);
+  };
 
   const onLike = async () => {
     try {
@@ -24,8 +32,9 @@ export const FeedPostCard = ({
       isLiking={loadingLike}
       onLike={onLike}
       onComment={() => onOpenComments?.(post)}
-      onShare={() => onSharePost?.(post)}
+      onOpen={() => onOpenComments?.(post)}
       onAuthorClick={onAuthorClick}
+      onBookmark={handleBookmark}
     />
   );
 };

@@ -1,3 +1,5 @@
+import { formatPostDate } from "../../utils/formatPostDate";
+
 export const CommentItem = ({ comment }) => {
   return (
     <div className="flex gap-3">
@@ -10,7 +12,9 @@ export const CommentItem = ({ comment }) => {
         <div className="flex justify-between">
           <h4 className="font-semibold">{comment.senderName}</h4>
 
-          <span className="text-xs text-gray-500">{comment.createdAt}</span>
+          <span className="text-xs text-gray-500">
+            {formatPostDate(comment.createdAt)}
+          </span>
         </div>
 
         <p className="mt-1 text-gray-700">{comment.content}</p>

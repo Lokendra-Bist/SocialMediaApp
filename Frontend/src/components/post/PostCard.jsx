@@ -7,14 +7,17 @@ export const PostCard = ({
   isLiking,
   onLike,
   onComment,
-  onShare,
+  onOpen,
   onAuthorClick,
+  onBookmark,
 }) => {
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <PostHeader post={post} onAuthorClick={onAuthorClick} />
 
-      <PostContent content={post.content} imageUrl={post.imageUrl} />
+      <div onClick={onOpen} className="cursor-pointer">
+        <PostContent content={post.content} imageUrl={post.imageUrl} />
+      </div>
 
       <PostActions
         liked={post.liked}
@@ -23,7 +26,8 @@ export const PostCard = ({
         isLiking={isLiking}
         onLike={onLike}
         onComment={onComment}
-        onShare={onShare}
+        onBookmark={onBookmark}
+        saved={post.saved}
       />
     </article>
   );

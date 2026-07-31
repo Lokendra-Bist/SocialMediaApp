@@ -1,4 +1,4 @@
-import { FiHeart, FiMessageCircle, FiShare2 } from "react-icons/fi";
+import { FiHeart, FiMessageCircle, FiBookmark } from "react-icons/fi";
 
 const ActionButton = ({ label, icon, count, className = "", ...props }) => {
   return (
@@ -21,11 +21,16 @@ export const PostActions = ({
   isLiking,
   onLike,
   onComment,
-  onShare,
+  saved,
+  onBookmark,
 }) => {
   return (
     <footer className="mt-5 flex gap-6 border-t border-slate-100 pt-4">
       <ActionButton
+        onClick={(e) => {
+          e.stopPropagation();
+          onLike?.();
+        }}
         label={liked ? "Unlike post" : "Like post"}
         count={likesCount}
         icon={<FiHeart size={20} fill={liked ? "currentColor" : "none"} />}
@@ -34,20 +39,27 @@ export const PostActions = ({
         aria-pressed={liked}
         className={liked ? "text-red-500" : "text-slate-500 hover:text-red-500"}
       />
-
       <ActionButton
+        onClick={(e) => {
+          e.stopPropagation();
+          onComment?.();
+        }}
         label="Open comments"
         count={commentsCount}
         icon={<FiMessageCircle size={20} />}
         onClick={onComment}
         className="text-slate-500 hover:text-blue-500"
       />
-
       <ActionButton
-        label="Share post"
-        icon={<FiShare2 size={20} />}
-        onClick={onShare}
-        className="text-slate-500 hover:text-green-500"
+        onClick={(e) => {
+          e.stopPropagation();
+          onBookmark?.();
+        }}
+        label={saved ? "Remove from favourites" : "Save post"}
+        icon={<FiBookmark size={20} fill={saved ? "currentColor" : "none"} />}
+        className={
+          saved ? "text-yellow-500" : "text-slate-500 hover:text-yellow-500"
+        }
       />
     </footer>
   );

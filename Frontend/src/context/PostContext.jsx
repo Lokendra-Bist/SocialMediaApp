@@ -24,6 +24,18 @@ export const PostProvider = ({ children }) => {
           : post,
       ),
     );
+
+    setMyPosts((prev) =>
+      prev.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              liked,
+              likesCount,
+            }
+          : post,
+      ),
+    );
   };
 
   const updatePostLike = (postId, likesCount) => {
@@ -33,6 +45,54 @@ export const PostProvider = ({ children }) => {
           ? {
               ...post,
               likesCount,
+            }
+          : post,
+      ),
+    );
+  };
+
+  const updatePostCommentCount = (postId, commentsCount) => {
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              commentsCount,
+            }
+          : post,
+      ),
+    );
+
+    setMyPosts((prev) =>
+      prev.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              commentsCount,
+            }
+          : post,
+      ),
+    );
+  };
+
+  const updateOwnFavourite = (postId, saved) => {
+    setPosts((prev) =>
+      prev.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              saved,
+            }
+          : post,
+      ),
+    );
+
+    setMyPosts((prev) =>
+      prev.map((post) =>
+        post.id === postId
+          ? {
+              ...post,
+              saved,
             }
           : post,
       ),
@@ -49,6 +109,8 @@ export const PostProvider = ({ children }) => {
         updateMyPostLike,
         myPosts,
         setMyPosts,
+        updatePostCommentCount,
+        updateOwnFavourite,
       }}
     >
       {children}

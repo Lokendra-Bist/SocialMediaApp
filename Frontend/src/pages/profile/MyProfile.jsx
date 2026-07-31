@@ -6,11 +6,15 @@ import { useMyPosts } from "../../hooks/useMyPosts";
 import { FeedPostCard } from "../../components/post/FeedPostCard";
 import toast from "react-hot-toast";
 import { uploadCoverImage } from "../../services/UserProfileService";
+import { usePostModal } from "../../hooks/usePostModal";
+import { PostDetailModal } from "../../components/modal/PostDetailModal";
 
 export const MyProfile = () => {
   const { profile, updateProfilePhotos } = useProfile();
 
   const { posts, loading } = useMyPosts();
+
+  const { open, selectedPost, openPost, closePost } = usePostModal();
 
   const handlePhotoUpload = async (file, type) => {
     if (!file) return;
@@ -80,10 +84,18 @@ export const MyProfile = () => {
               You haven't posted anything yet.
             </div>
           ) : (
-            posts.map((post) => <FeedPostCard key={post.id} post={post} />)
+            posts.map((post) => (
+              <FeedPostCard
+                key={post.id}
+                post={post}
+                onOpenComments={openPost}
+              />
+            ))
           )}
         </div>
       </div>
+
+      <PostDetailModal open={open} post={selectedPost} onClose={closePost} />
     </div>
   );
 };
