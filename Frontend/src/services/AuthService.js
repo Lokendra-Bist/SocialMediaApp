@@ -3,6 +3,7 @@ import * as authApi from "../api/authApi";
 export const sendOTP = async (email, type) => {
   try {
     const response = await authApi.sendOTP(email, type);
+    console.log("Send OTP response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error sending OTP:", error);
@@ -13,6 +14,7 @@ export const sendOTP = async (email, type) => {
 export const verifyOTPAndRegisterUser = async (data) => {
   try {
     const response = await authApi.verifyOtpAndRegister(data);
+    console.log("Verify OTP and Register User response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error verifying OTP:", error);
@@ -34,6 +36,7 @@ export const loginUser = async (data) => {
 export const verifyOtpForResetPassword = async (data) => {
   try {
     const response = await authApi.verifyResetPasswordOtp(data);
+    console.log("Verify OTP for Reset Password response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error verifying OTP:", error);
@@ -44,6 +47,7 @@ export const verifyOtpForResetPassword = async (data) => {
 export const resetUsersPassword = async (data) => {
   try {
     const response = await authApi.resetPassword(data);
+    console.log("Reset Password response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error resetting password:", error);

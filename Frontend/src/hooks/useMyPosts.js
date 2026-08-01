@@ -12,8 +12,6 @@ export const useMyPosts = () => {
       setLoading(true);
 
       const response = await getMyPosts(page);
-      console.log("My Post: ", response.data);
-
       setMyPosts(response.data.content);
       setPageInfo(response.data);
     } finally {

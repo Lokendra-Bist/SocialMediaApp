@@ -3,7 +3,7 @@ import * as userProfileApi from "../api/userProfileApi";
 export const getMyProfile = async () => {
   try {
     const response = await userProfileApi.getUserProfile();
-    console.log("Fetched user profile:", response.data);
+    console.log("Get my profile response:", response.data);
     return await response.data;
   } catch (error) {
     console.error("Error fetching user profile:", error);
@@ -14,7 +14,7 @@ export const getMyProfile = async () => {
 export const fetchMyOwnProfile = async () => {
   try {
     const response = await userProfileApi.getMyProfile();
-    console.log("Fetched user profile:", response.data);
+    console.log("Fetch my own profile response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching user profile:", error);
@@ -25,6 +25,7 @@ export const fetchMyOwnProfile = async () => {
 export const uploadUserProfile = async (file) => {
   try {
     const response = await userProfileApi.uploadUserProfile(file);
+    console.log("Upload user profile response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error uploading user profile:", error);
@@ -35,6 +36,7 @@ export const uploadUserProfile = async (file) => {
 export const uploadCoverImage = async (image) => {
   try {
     const response = await userProfileApi.uploadCover(image);
+    console.log("Upload cover photo response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error uploading cover photo:", error);

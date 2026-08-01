@@ -1,11 +1,13 @@
+import { PostDetailModal } from "../../components/modal/PostDetailModal";
 import { FeedPostCard } from "../../components/post/FeedPostCard";
 import { usePostModal } from "../../hooks/usePostModal";
 import { useSavedPosts } from "../../hooks/useSavedPosts";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 export const SavedPosts = () => {
-  const { posts, loading, page, totalPages, setPage, loadSavedPosts } =
+  const { posts, loading, page, loadSavedPosts, hasMore, loadNextPage } =
     useSavedPosts();
-  const { openPost } = usePostModal();
+  const { open, selectedPost, openPost, closePost } = usePostModal();
 
   const handleBookmarkSuccess = async (result) => {
     if (!result.saved) {
@@ -13,7 +15,13 @@ export const SavedPosts = () => {
     }
   };
 
-  if (loading) {
+  const observerRef = useInfiniteScroll({
+    loading,
+    hasMore,
+    onLoadMore: loadNextPage,
+  });
+
+  if (loading && posts.length === 0) {
     return <div className="text-center py-10">Loading saved posts...</div>;
   }
 
@@ -36,27 +44,11 @@ export const SavedPosts = () => {
         />
       ))}
 
-      <div className="flex justify-center gap-3 mt-6">
-        <button
-          disabled={page === 0}
-          onClick={() => setPage((prev) => prev - 1)}
-          className="px-4 py-2 border rounded-lg disabled:opacity-40"
-        >
-          Previous
-        </button>
+      <div ref={observerRef} className="h-10" />
 
-        <span className="px-3 py-2">
-          {page + 1} / {totalPages}
-        </span>
+      {loading && <div className="text-center py-6">Loading more posts...</div>}
 
-        <button
-          disabled={page + 1 >= totalPages}
-          onClick={() => setPage((prev) => prev + 1)}
-          className="px-4 py-2 border rounded-lg disabled:opacity-40"
-        >
-          Next
-        </button>
-      </div>
+      <PostDetailModal open={open} post={selectedPost} onClose={closePost} />
     </div>
   );
 };

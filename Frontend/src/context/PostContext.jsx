@@ -1,10 +1,50 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { fetchAllPosts } from "../services/PostsService";
+import { useAuth } from "../hooks/useAuth";
 
 export const PostContext = createContext();
 
 export const PostProvider = ({ children }) => {
   const [posts, setPosts] = useState([]);
   const [myPosts, setMyPosts] = useState([]);
+
+  const { token } = useAuth();
+
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
+  const loadPosts = async (currentPage = 0) => {
+    if (loading) return;
+    try {
+      setLoading(true);
+
+      const response = await fetchAllPosts(currentPage);
+
+      const data = response.data;
+
+      setPosts((prev) =>
+        currentPage === 0 ? data.content : [...prev, ...data.content],
+      );
+
+      setPage(currentPage);
+      setHasMore(!data.last);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadNextPage = () => {
+    if (loading || !hasMore) return;
+
+    const nextPage = page + 1;
+    loadPosts(nextPage);
+  };
+
+  useEffect(() => {
+    if (!token) return;
+    loadPosts(0);
+  }, [token]);
 
   const updateMyPostLike = (postId, likesCount) => {
     setMyPosts((prev) =>
@@ -111,6 +151,10 @@ export const PostProvider = ({ children }) => {
         setMyPosts,
         updatePostCommentCount,
         updateOwnFavourite,
+        loading,
+        hasMore,
+        loadPosts,
+        loadNextPage,
       }}
     >
       {children}

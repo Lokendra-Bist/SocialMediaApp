@@ -1,25 +1,20 @@
-import { useEffect } from "react";
 import { CreatePostCard } from "../../components/post/CreatePostCard";
 import { FeedPostCard } from "../../components/post/FeedPostCard";
 import { usePosts } from "../../hooks/usePosts";
-import { fetchAllPosts } from "../../services/PostsService";
 import { PostDetailModal } from "../../components/modal/PostDetailModal";
 import { usePostModal } from "../../hooks/usePostModal";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 export const Home = () => {
-  const { posts, setPosts } = usePosts();
+  const { posts, loading, hasMore, loadNextPage } = usePosts();
 
   const { open, selectedPost, openPost, closePost } = usePostModal();
 
-  useEffect(() => {
-    const loadPosts = async () => {
-      const response = await fetchAllPosts();
-      console.log("Fetched Posts: ", response.data);
-      setPosts(response.data.content);
-    };
-
-    loadPosts();
-  }, [setPosts]);
+  const observerRef = useInfiniteScroll({
+    loading,
+    hasMore,
+    onLoadMore: loadNextPage,
+  });
 
   return (
     <>
@@ -33,6 +28,12 @@ export const Home = () => {
             <FeedPostCard key={post.id} post={post} onOpenComments={openPost} />
           ))}
         </div>
+
+        <div ref={observerRef} className="h-10" />
+
+        {loading && (
+          <div className="text-center py-6">Loading more posts...</div>
+        )}
 
         <PostDetailModal open={open} post={selectedPost} onClose={closePost} />
       </div>

@@ -1,32 +1,25 @@
 import { useEffect, useState } from "react";
-import {
-  getSavedPosts,
-  savePostToFavourite,
-} from "../services/SavedPostsService";
-import { usePosts } from "./usePosts";
+import { getSavedPosts } from "../services/SavedPostsService";
 
-export const useSavedPosts = (postId) => {
-  const { updateOwnFavourite } = usePosts();
-
+export const useSavedPosts = () => {
   const [posts, setPosts] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const handleFavourite = async () => {
-    const res = await savePostToFavourite(postId);
-    updateOwnFavourite(postId, res.data.saved);
-    return res.data;
-  };
-
   const loadSavedPosts = async (currentPage) => {
     try {
       setLoading(true);
-
       const response = await getSavedPosts(currentPage);
-      setPosts(response.data.content);
+      setPosts((prev) =>
+        currentPage === 0
+          ? response.data.content
+          : [...prev, ...response.data.content],
+      );
       setPage(response.data.number);
       setTotalPages(response.data.totalPages);
+      setHasMore(!response.data.last);
     } finally {
       setLoading(false);
     }
@@ -36,12 +29,20 @@ export const useSavedPosts = (postId) => {
     loadSavedPosts(0);
   }, []);
 
+  const loadNextPage = () => {
+    if (loading || !hasMore) return;
+
+    loadSavedPosts(page + 1);
+  };
+
   return {
-    handleFavourite,
     posts,
     page,
     totalPages,
     loading,
     loadSavedPosts,
+    hasMore,
+    loadNextPage,
+    setPage,
   };
 };

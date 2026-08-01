@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useLike } from "../../hooks/useLike";
 import { PostCard } from "./PostCard";
-import { useSavedPosts } from "../../hooks/useSavedPosts";
+import { useFavourite } from "../../hooks/useFavourite";
 
 export const FeedPostCard = ({
   post,
@@ -10,7 +10,7 @@ export const FeedPostCard = ({
   onBookmarkSuccess,
 }) => {
   const { handleLike, loadingLike } = useLike(post.id);
-  const { handleFavourite } = useSavedPosts(post.id);
+  const { handleFavourite } = useFavourite(post.id);
 
   const handleBookmark = async () => {
     const result = await handleFavourite();

@@ -3,6 +3,7 @@ import * as postApi from "../api/postApi";
 export const createPost = async (postData) => {
   try {
     const response = await postApi.createUserPost(postData);
+    console.log("Post created successfully: ", response.data);
     return response.data;
   } catch (error) {
     console.error("Error creating post:", error);
@@ -10,10 +11,10 @@ export const createPost = async (postData) => {
   }
 };
 
-export const fetchAllPosts = async () => {
+export const fetchAllPosts = async (page = 0, size = 5) => {
   try {
-    const response = await postApi.getAllPosts();
-    console.log(response.data);
+    const response = await postApi.getAllPosts(page, size);
+    console.log("Fetched all posts: ", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -24,7 +25,7 @@ export const fetchAllPosts = async () => {
 export const togglePostLike = async (postId) => {
   try {
     const response = await postApi.toggleLike(postId);
-    console.log("TooglePostLike in service", response.data);
+    console.log("Toggled like for post: ", response.data);
     return response.data;
   } catch (error) {
     console.error("Error toggling like:", error);
@@ -35,7 +36,7 @@ export const togglePostLike = async (postId) => {
 export const getMyPosts = async () => {
   try {
     const response = await postApi.getMyPosts();
-    console.log(response.data);
+    console.log("Fetched my posts: ", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching posts:", error);

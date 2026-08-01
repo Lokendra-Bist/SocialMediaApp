@@ -11,7 +11,7 @@ import { getComments } from "../../services/CommentService";
 import toast from "react-hot-toast";
 import { useLike } from "../../hooks/useLike";
 import { usePosts } from "../../hooks/usePosts";
-import { useSavedPosts } from "../../hooks/useSavedPosts";
+import { useFavourite } from "../../hooks/useFavourite";
 
 export const PostDetailModal = ({ open, post, onClose }) => {
   if (!open || !post) return null;
@@ -29,7 +29,7 @@ export const PostDetailModal = ({ open, post, onClose }) => {
 
   const { handleLike, loadingLike } = useLike(currentPost.id);
 
-  const { handleFavourite } = useSavedPosts(currentPost.id);
+  const { handleFavourite } = useFavourite(currentPost.id);
 
   const onLike = async () => {
     try {
