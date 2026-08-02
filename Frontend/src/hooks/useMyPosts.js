@@ -4,29 +4,62 @@ import { usePosts } from "./usePosts";
 
 export const useMyPosts = () => {
   const { myPosts, setMyPosts } = usePosts();
-  const [pageInfo, setPageInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
-  const loadPosts = async (page = 0) => {
+  const loadPosts = async (currentPage = 0) => {
+    if (loading) return;
+
     try {
       setLoading(true);
 
-      const response = await getMyPosts(page);
-      setMyPosts(response.data.content);
-      setPageInfo(response.data);
+      const response = await getMyPosts(currentPage);
+
+      setMyPosts((prev) =>
+        currentPage === 0
+          ? response.data.content
+          : [...prev, ...response.data.content],
+      );
+
+      setPage(response.data.number);
+      setHasMore(!response.data.last);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadPosts();
+    loadPosts(0);
   }, []);
+
+  const loadNextPage = async () => {
+    if (loading || !hasMore) return;
+
+    await loadPosts(page + 1);
+  };
+
+  // const loadPosts = async (page = 0) => {
+  //   try {
+  //     setLoading(true);
+
+  //     const response = await getMyPosts(page);
+  //     setMyPosts(response.data.content);
+  //     setPageInfo(response.data);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   loadPosts();
+  // }, []);
 
   return {
     posts: myPosts,
-    pageInfo,
     loading,
-    reloadPosts: loadPosts,
+    hasMore,
+    loadNextPage,
+    reloadPosts: () => loadPosts(0),
   };
 };

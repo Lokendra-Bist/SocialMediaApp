@@ -8,13 +8,20 @@ import toast from "react-hot-toast";
 import { uploadCoverImage } from "../../services/UserProfileService";
 import { usePostModal } from "../../hooks/usePostModal";
 import { PostDetailModal } from "../../components/modal/PostDetailModal";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 export const MyProfile = () => {
   const { profile, updateProfilePhotos } = useProfile();
 
-  const { posts, loading } = useMyPosts();
-
   const { open, selectedPost, openPost, closePost } = usePostModal();
+
+  const { posts, loading, hasMore, loadNextPage } = useMyPosts();
+
+  const observerRef = useInfiniteScroll({
+    loading,
+    hasMore,
+    onLoadMore: loadNextPage,
+  });
 
   const handlePhotoUpload = async (file, type) => {
     if (!file) return;
@@ -94,6 +101,10 @@ export const MyProfile = () => {
           )}
         </div>
       </div>
+
+      <div ref={observerRef} className="h-10" />
+
+      {loading && <div className="py-6 text-center">Loading more posts...</div>}
 
       <PostDetailModal open={open} post={selectedPost} onClose={closePost} />
     </div>

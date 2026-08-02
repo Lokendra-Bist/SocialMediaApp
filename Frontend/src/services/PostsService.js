@@ -33,9 +33,9 @@ export const togglePostLike = async (postId) => {
   }
 };
 
-export const getMyPosts = async () => {
+export const getMyPosts = async (page, size) => {
   try {
-    const response = await postApi.getMyPosts();
+    const response = await postApi.getMyPosts(page, size);
     console.log("Fetched my posts: ", response.data);
     return response.data;
   } catch (error) {
