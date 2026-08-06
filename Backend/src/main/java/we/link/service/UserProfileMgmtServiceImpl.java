@@ -65,8 +65,8 @@ public class UserProfileMgmtServiceImpl implements IUserProfileMgmtService {
 		Users currentUser = userRepo.findByEmail(user.getEmail())
 								.orElseThrow(() -> new ResourceNotFoundException("User Not Found!"));
 		
-		long followersCount = followRepo.countByFollower_Id(user.getId());
-		long followingCount = followRepo.countByFollowing_Id(user.getId());
+		long followersCount = followRepo.countByFollowing_Id(user.getId());
+		long followingCount = followRepo.countByFollower_Id(user.getId());
 		
 		return UserProfileMapper.toProfileResponse(currentUser, followersCount, followingCount);
 	}
