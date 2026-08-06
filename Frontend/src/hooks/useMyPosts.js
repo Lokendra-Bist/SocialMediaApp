@@ -39,22 +39,6 @@ export const useMyPosts = () => {
     await loadPosts(page + 1);
   };
 
-  // const loadPosts = async (page = 0) => {
-  //   try {
-  //     setLoading(true);
-
-  //     const response = await getMyPosts(page);
-  //     setMyPosts(response.data.content);
-  //     setPageInfo(response.data);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   loadPosts();
-  // }, []);
-
   return {
     posts: myPosts,
     loading,

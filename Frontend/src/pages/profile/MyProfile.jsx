@@ -9,6 +9,9 @@ import { uploadCoverImage } from "../../services/UserProfileService";
 import { usePostModal } from "../../hooks/usePostModal";
 import { PostDetailModal } from "../../components/modal/PostDetailModal";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
+import { useState } from "react";
+import { FollowListModal } from "../../components/follow/FollowListModal";
+import { useFollowers } from "../../hooks/useFollowers";
 
 export const MyProfile = () => {
   const { profile, updateProfilePhotos } = useProfile();
@@ -16,6 +19,33 @@ export const MyProfile = () => {
   const { open, selectedPost, openPost, closePost } = usePostModal();
 
   const { posts, loading, hasMore, loadNextPage } = useMyPosts();
+
+  const [openFollowers, setOpenFollowers] = useState(false);
+  const [openFollowing, setOpenFollowing] = useState(false);
+
+  const {
+    followers,
+    following,
+
+    loadFollowers,
+    loadFollowing,
+
+    loadMoreFollowers,
+    loadMoreFollowing,
+
+    followersHasMore,
+    followingHasMore,
+  } = useFollowers();
+
+  const handleFollowers = async () => {
+    await loadFollowers();
+    setOpenFollowers(true);
+  };
+
+  const handleFollowing = async () => {
+    await loadFollowing();
+    setOpenFollowing(true);
+  };
 
   const observerRef = useInfiniteScroll({
     loading,
@@ -80,6 +110,8 @@ export const MyProfile = () => {
           <ProfileStats
             followers={profile?.followersCount}
             following={profile?.followingCount}
+            onFollowersClick={handleFollowers}
+            onFollowingClick={handleFollowing}
           />
         </div>
 
@@ -107,6 +139,26 @@ export const MyProfile = () => {
       {loading && <div className="py-6 text-center">Loading more posts...</div>}
 
       <PostDetailModal open={open} post={selectedPost} onClose={closePost} />
+
+      {openFollowers && (
+        <FollowListModal
+          title="Followers"
+          users={followers}
+          hasMore={followersHasMore}
+          onLoadMore={loadMoreFollowers}
+          onClose={() => setOpenFollowers(false)}
+        />
+      )}
+
+      {openFollowing && (
+        <FollowListModal
+          title="Following"
+          users={following}
+          hasMore={followingHasMore}
+          onLoadMore={loadMoreFollowing}
+          onClose={() => setOpenFollowing(false)}
+        />
+      )}
     </div>
   );
 };
